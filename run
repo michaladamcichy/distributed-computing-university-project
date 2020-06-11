@@ -1,0 +1,2 @@
+mpic++ hello.cpp -o hello
+mpirun hello
