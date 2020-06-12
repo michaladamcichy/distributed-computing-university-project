@@ -1,3 +1,5 @@
+#pragma once
+
 enum ResourceType
 {
     RESOURCE_ZLECENIE = 100,
@@ -11,3 +13,5 @@ enum MessageType
     MESSAGE_REPLY,
     MESSAGE_RELEASE
 };
+
+#define BURMISTRZ_ID 0

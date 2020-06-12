@@ -1,5 +1,10 @@
+#pragma once
+
 #include "stdafx.h"
-#include "enum.h"
+#include "enums.h"
+#include "Messages.h"
+#include "Lamport.h"
+#include "Communication.h"
 
 class Resource
 {
@@ -13,23 +18,24 @@ class Resource
         this->type = type;
         this->maxResourceAmount = maxResourceAmount;
 
-        createRequestsListener(); //updates and sorts requests by timestamp
-        createRepliesListener();  //updates replies
-        createReleaseListener();
+        // createRequestsListener(); //updates and sorts requests by timestamp
+        // createRepliesListener();  //updates replies
+        // createReleaseListener();
     }
 
     void acquire(int units)
     {
-        Request request(units, Lamport::getTimestamp());
-        sendToAll(type + REQUEST, request);
+        Request request(units, Lamport::getTimestamp(), type);
+        COM::sendToAll(&request, type + MESSAGE_REQUEST);
 
-        while (replies.size() < size - 1)
+        while (replies.size() < MpiConfig::size - 1)
             ;
 
         int sum = 0;
         for (int i = 0; i < requests.size(); i++)
         {
-            if (request[i].rank == rank && units <= maxResourceAmount - sum)
+            sum += requests[i].units;
+            if ((requests[i].source == MpiConfig::rank) && units <= (maxResourceAmount - sum))
             {
                 //Success, I have acquired resource
             }
@@ -38,14 +44,13 @@ class Resource
                 //Not enough resources
                 //Should wait for release
             }
-
-            replies.clear();
         }
+        replies.clear();
+    }
 
-        void release(int units)
-        {
-            ReleaseOrder releaseOrder(units, Lamport::getTimestamp());
-            sendToAll(type + RELEASE, releaseOrder);
-        }
+    void release(int units)
+    {
+        Release release(MpiConfig::rank, units, Lamport::getTimestamp());
+        COM::sendToAll(&release, type + MESSAGE_RELEASE);
     }
 };

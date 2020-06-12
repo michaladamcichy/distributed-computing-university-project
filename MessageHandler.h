@@ -1,3 +1,5 @@
+#pragma once
+
 #include "stdafx.h"
 #include "enums.h"
 
@@ -45,4 +47,4 @@ private:
         messages.erase(messages.begin() + index);
         messagesMutex.unlock();
     }
-}
+};

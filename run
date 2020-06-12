@@ -1,2 +1,3 @@
-mpic++ hello.cpp -o hello
-mpirun hello
+filename="hamsters"
+mpic++ $filename.cpp -o $filename
+mpirun $filename
