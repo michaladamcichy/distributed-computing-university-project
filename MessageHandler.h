@@ -9,35 +9,49 @@ class MessageHandler
 private:
     MessageType type;
     vector<T> *messages;
-    mutex messagesMutex;
+    Mutex messagesMutex;
 
     bool end = false;
 
 public:
-    MessageHandler(vector<T> *messages, int type)
+    MessageHandler() {}
+
+    MessageHandler(vector<T> *messages, MessageType type)
+    {
+        init(messages, type);
+    }
+
+    void init(vector<T> *messages, MessageType type)
     {
         this->type = type;
         this->messages = messages;
+
+        pthread_t t;
+
+        pthread_create(&t, NULL, MessageHandler::threadFunction, (void *)this);
     }
 
 private:
-    void threadFunction()
+    static void *threadFunction(void *args)
     {
+        MessageHandler *that = (MessageHandler *)args;
+        //COM::log("Thread started", that->type);
         T buffer;
-        while (!end)
+        while (true) //alert powinno byc end
         {
             MPI_Recv(
                 &buffer,
-                sizeof(buffer),
+                sizeof(T),
                 MPI_BYTE,
                 MPI_ANY_SOURCE,
-                type,
+                that->type,
                 MPI_COMM_WORLD,
-                MPI_STATUS_IGNORE); //alert z tym tpyem
+                MPI_STATUS_IGNORE);
+            COM::logReceive((*((int *)&buffer)), &buffer, that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
 
-            messagesMutex.lock();
-            messages.push_back(buffer);
-            messagesMutex.unlock();
+            that->messagesMutex.lock(); //alert
+            that->messages->push_back(buffer);
+            that->messagesMutex.unlock();
         }
     }
 

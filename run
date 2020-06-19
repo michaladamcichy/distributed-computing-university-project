@@ -1,3 +1,4 @@
 filename="hamsters"
-mpic++ $filename.cpp -o $filename
+pkill $filename
+mpic++ -std=c++11 $filename.cpp -o $filename -lpthread
 mpirun $filename

@@ -5,22 +5,29 @@
 #include "Messages.h"
 #include "Lamport.h"
 #include "Communication.h"
+#include "MessageHandler.h"
 
 class Resource
 {
     vector<Request> requests;
     vector<Reply> replies;
+    vector<Release> releases;
     ResourceType type;
     int maxResourceAmount;
 
+    MessageHandler<Request> requestsHandler; //(&requests, MESSAGE_REQUEST);
+    MessageHandler<Reply> repliesHandler;    //(&replies, MESSAGE_REPLY);
+    MessageHandler<Release> releasesHandler; //(&releases, MESSAGE_RELEASE);
+
+public:
     Resource(ResourceType type, int maxResourceAmount)
     {
         this->type = type;
         this->maxResourceAmount = maxResourceAmount;
 
-        // createRequestsListener(); //updates and sorts requests by timestamp
-        // createRepliesListener();  //updates replies
-        // createReleaseListener();
+        requestsHandler.init(&requests, MESSAGE_REQUEST);
+        repliesHandler.init(&replies, MESSAGE_REPLY);
+        releasesHandler.init(&releases, MESSAGE_RELEASE);
     }
 
     void acquire(int units)

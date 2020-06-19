@@ -3,6 +3,7 @@
 #include "Resource.h"
 #include "MpiConfig.h"
 #include "Communication.h"
+#include "Constants.h"
 
 int main(int argc, char **argv)
 {
@@ -12,10 +13,14 @@ int main(int argc, char **argv)
 
     if (MpiConfig::rank == BURMISTRZ_ID)
     {
-        Reply reply = {10, 15};
-        reply.print();
+        //COM::sendToAll(&reply, MESSAGE_REPLY);
 
-        COM::sendToAll(&reply, MESSAGE_REPLY);
+        for (int i = 0; i < MpiConfig::size; i++)
+        {
+            Request request = Request(MpiConfig::rank, 5, RESOURCE_AGRAFKA);
+            COM::send(i, &request, MESSAGE_REQUEST);
+            COM::logSend(i, &request, MESSAGE_REQUEST);
+        }
 
         while (!end)
         {
@@ -34,18 +39,20 @@ int main(int argc, char **argv)
     }
     else
     {
-        Reply *reply = (Reply *)COM::receive(MESSAGE_REPLY);
+        // Reply *reply = (Reply *)COM::receive(MESSAGE_REPLY);
 
-        reply->print();
+        // reply->print();
 
         while (!end)
         {
             // vector<Zlecenie> zlecenia = receiveZlecenia();
 
-            // Resource zlecenia(ZLECENIE, MAX_ZLECENIA_NUMBER);
-            // Resource agrafki(AGRAFKA, MAX_AGRAFKI_NUMBER);
-            // Resource trucizny(TRUCIZNA, MAX_TRUCIZNA_COUNT);
+            Resource zlecenia(RESOURCE_ZLECENIE, Constants::MAX_ZLECENIA_COUNT);
+            Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
+            Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
+            while (true)
+                ;
             // while (...)
             // { //Repeat until succeeded
             //     Zlecenie zlecenie = zlecenia.acquire(1);

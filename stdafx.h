@@ -1,4 +1,5 @@
 #pragma once
+using namespace std;
 
 #include <mpi.h>
 #include <cstdio>
@@ -16,5 +17,5 @@
 #include <cmath>
 #include <mutex>
 #include <thread>
-
-using namespace std;
+#include <pthread.h>
+#include "Mutex.h"

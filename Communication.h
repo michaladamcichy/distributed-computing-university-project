@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Messages.h"
 #include "MpiConfig.h"
+#include "Communication.h"
 
 namespace COM
 {
@@ -59,6 +60,29 @@ namespace COM
             MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
         return data;
+    }
+
+    void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
+    {
+        cout << "PROCESS " << MpiConfig::rank << ": " << message << " " << Messages::getName(type) << endl;
+    }
+
+    void logSend(int target, const void *message, MessageType type)
+    {
+        cout << "PROCESS " << MpiConfig::rank << "-> PROCESS " << target << ": ";
+        cout << Messages::getName(type) << " ";
+        cout << ((Message *)message)
+                    ->toString()
+             << endl; //alert
+    }
+
+    void logReceive(int source, const void *message, MessageType type)
+    {
+        cout << "PROCESS " << MpiConfig::rank << "<--- PROCESS " << source << ": ";
+        cout << Messages::getName(type) << " ";
+        cout << ((Message *)message)
+                    ->toString()
+             << endl; //alert
     }
     // template <class T>
     // void send(int target, T &message)

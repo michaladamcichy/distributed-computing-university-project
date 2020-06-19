@@ -7,11 +7,23 @@ namespace MpiConfig
     int rank;
     int size;
 
+    void checkThreadSupport(int provided)
+    {
+        if (provided != MPI_THREAD_MULTIPLE)
+        {
+            cout << "Threads NOT supported!!!\n";
+        }
+    }
+
     void init(int argc, char **argv)
     {
-        MPI_Init(&argc, &argv);
+        int provided;
+        MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
+        checkThreadSupport(provided);
         MPI_Comm_size(MPI_COMM_WORLD, &size);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+        //inicjuj();
     }
 
     void cleanUp()

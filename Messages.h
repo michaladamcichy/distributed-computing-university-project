@@ -4,7 +4,20 @@
 #include "enums.h"
 #include "MpiConfig.h"
 
-class Request
+class Message
+{
+public:
+    Message()
+    {
+    }
+
+    string toString()
+    {
+        return "";
+    }
+};
+
+class Request // : public Message
 {
 public:
     int source;
@@ -19,9 +32,14 @@ public:
         this->units = units;
         this->type = type;
     }
+
+    string toString()
+    {
+        return "";
+    }
 };
 
-class Reply
+class Reply // : public Message
 {
 public:
     int source;
@@ -42,9 +60,14 @@ public:
         cout << timestamp << endl
              << endl;
     }
+
+    string toString()
+    {
+        return "";
+    }
 };
 
-class Release
+class Release // : public Message
 {
 public:
     int source;
@@ -58,6 +81,11 @@ public:
         this->source = source;
         this->units = units;
         this->timestamp = timestamp;
+    }
+
+    string toString()
+    {
+        return "";
     }
 };
 
@@ -80,6 +108,23 @@ namespace Messages
         else
         {
             return sizeof(Release);
+        }
+    }
+
+    string
+    getName(int type)
+    {
+        if (type == MESSAGE_REQUEST)
+        {
+            return "REQUEST";
+        }
+        else if (type == MESSAGE_REPLY)
+        {
+            return "REPLY";
+        }
+        else
+        {
+            return "RELEASE";
         }
     }
 } // namespace Messages
