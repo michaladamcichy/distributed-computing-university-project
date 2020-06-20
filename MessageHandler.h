@@ -9,26 +9,37 @@ class MessageHandler
 private:
     MessageType type;
     vector<T> *messages;
-    Mutex messagesMutex;
+    Mutex *messagesMutex;
+
+    bool changedFlag = false;
 
     bool end = false;
 
 public:
     MessageHandler() {}
 
-    MessageHandler(vector<T> *messages, MessageType type)
+    MessageHandler(vector<T> *messages, MessageType type, Mutex *messageMutex)
     {
-        init(messages, type);
+        init(messages, type, messagesMutex);
     }
 
-    void init(vector<T> *messages, MessageType type)
+    void init(vector<T> *messages, MessageType type, Mutex *messageMutex)
     {
         this->type = type;
         this->messages = messages;
+        this->messagesMutex = messagesMutex;
 
         pthread_t t;
 
         pthread_create(&t, NULL, MessageHandler::threadFunction, (void *)this);
+    }
+
+    bool changed()
+    {
+        bool answer = changedFlag;
+        if (changedFlag)
+            changedFlag = false;
+        return answer;
     }
 
 private:
@@ -47,18 +58,20 @@ private:
                 that->type,
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
+            that->changedFlag = true;
             COM::logReceive((*((int *)&buffer)), &buffer, that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
 
-            that->messagesMutex.lock(); //alert
+            that->messagesMutex->lock(); //alert
             that->messages->push_back(buffer);
-            that->messagesMutex.unlock();
+            that->messagesMutex->unlock();
         }
     }
 
     void remove(int index)
     {
-        messagesMutex.lock();
+        messagesMutex->lock();
         messages.erase(messages.begin() + index);
-        messagesMutex.unlock();
+        changedFlag = true;
+        messagesMutex->unlock();
     }
 };

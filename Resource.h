@@ -16,8 +16,14 @@ class Resource
     int maxResourceAmount;
 
     MessageHandler<Request> requestsHandler; //(&requests, MESSAGE_REQUEST);
-    MessageHandler<Reply> repliesHandler;    //(&replies, MESSAGE_REPLY);
-    MessageHandler<Release> releasesHandler; //(&releases, MESSAGE_RELEASE);
+    Mutex requestsMutex;
+
+    MessageHandler<Reply> repliesHandler; //(&replies, MESSAGE_REPLY);
+    Mutex repliesMutex;
+
+    MessageHandler<Release>
+        releasesHandler; //(&releases, MESSAGE_RELEASE);
+    Mutex releasesMutex;
 
 public:
     Resource(ResourceType type, int maxResourceAmount)
@@ -25,12 +31,12 @@ public:
         this->type = type;
         this->maxResourceAmount = maxResourceAmount;
 
-        requestsHandler.init(&requests, MESSAGE_REQUEST);
-        repliesHandler.init(&replies, MESSAGE_REPLY);
-        releasesHandler.init(&releases, MESSAGE_RELEASE);
+        requestsHandler.init(&requests, MESSAGE_REQUEST, &requestsMutex);
+        repliesHandler.init(&replies, MESSAGE_REPLY, &repliesMutex);
+        releasesHandler.init(&releases, MESSAGE_RELEASE, &releasesMutex);
     }
 
-    void acquire(int units)
+    int acquire(int units)
     {
         Request request(units, Lamport::getTimestamp(), type);
         COM::sendToAll(&request, type + MESSAGE_REQUEST);
@@ -39,20 +45,43 @@ public:
             ;
 
         int sum = 0;
+        int returnValue = -1;
+
+        requestsMutex.lock();
+        requestsHandler.changed();
+        int lastRequestsSize = requests.size();
         for (int i = 0; i < requests.size(); i++)
         {
             sum += requests[i].units;
             if ((requests[i].source == MpiConfig::rank) && units <= (maxResourceAmount - sum))
             {
-                //Success, I have acquired resource
+                COM::log("acquired resource");
+
+                if (type == RESOURCE_ZLECENIE)
+                {
+                    returnValue = i;
+                }
+
+                break;
             }
             else
             {
-                //Not enough resources
-                //Should wait for release
+                requestsMutex.unlock();
+
+                while (!requestsHandler.changed())
+                {
+                }
+
+                requestsMutex.lock();
+
+                i = 0;
             }
         }
+        requestsMutex.unlock();
+
         replies.clear();
+
+        return returnValue;
     }
 
     void release(int units)

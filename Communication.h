@@ -7,53 +7,32 @@
 
 namespace COM
 {
-    void send(int target, void *message, int type)
+    void send(int target, void *message, int type, int count = 1)
     {
         MPI_Send(
             message,
-            Messages::getSize(type),
+            Messages::getSize(type) * count,
             MPI_BYTE,
             target,
             type,
             MPI_COMM_WORLD);
     }
 
-    void sendToAll(void *message, int type)
+    void sendToAll(void *message, int type, int count = 1)
     {
         for (int i = 0; i < MpiConfig::size; i++)
         {
-            send(i, message, type);
+            send(i, message, type, count);
         }
     }
 
-    void *receive(int type, int sender = MPI_ANY_SOURCE)
+    void *receive(int type, int sender = MPI_ANY_SOURCE, int count = 1)
     {
-        Request *request = new Request();
-        Reply *reply = new Reply(0, 0);
-        Release *release = new Release();
-
-        void *data;
-
-        if (type == MESSAGE_REQUEST)
-        {
-            data = request;
-        }
-        else if (type == MESSAGE_REPLY)
-        {
-            data = reply;
-        }
-        else if (type == MESSAGE_RELEASE)
-        {
-            data = release;
-        }
-        else
-        {
-            data = 0;
-        }
+        void *data = malloc(Messages::getSize(type) * count);
 
         MPI_Recv(
             data,
-            Messages::getSize(type),
+            Messages::getSize(type) * count,
             MPI_BYTE,
             sender,
             type,

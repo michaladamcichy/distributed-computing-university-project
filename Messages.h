@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "enums.h"
 #include "MpiConfig.h"
+#include "Zlecenie.h"
 
 class Message
 {
@@ -105,10 +106,24 @@ namespace Messages
         {
             return sizeof(Reply);
         }
-        else
+        else if (type == MESSAGE_RELEASE)
         {
             return sizeof(Release);
         }
+        else if (type == MESSAGE_INIT)
+        {
+            return sizeof(Zlecenie);
+        }
+        else if (type == MESSAGE_STOP)
+        {
+            return 0;
+        }
+        else if (type == MESSAGE_COMPLETED)
+        {
+            return 0;
+        }
+
+        return 0;
     }
 
     string

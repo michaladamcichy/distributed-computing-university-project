@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 
 namespace Constants
@@ -5,4 +6,6 @@ namespace Constants
     const int MAX_ZLECENIA_COUNT = 10;
     const int MAX_AGRAFKI_COUNT = 5;
     const int MAX_TRUCIZNY_COUNT = 10;
+
+    const int MAX_HAMSTERS_IN_ZLECENIE_COUNT = 10;
 } // namespace Constants

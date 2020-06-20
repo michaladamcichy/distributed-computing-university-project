@@ -4,9 +4,12 @@
 #include "MpiConfig.h"
 #include "Communication.h"
 #include "Constants.h"
+#include "Zlecenie.h"
 
 int main(int argc, char **argv)
 {
+    srand(time(NULL));
+
     bool end;
 
     MpiConfig::init(argc, argv);
@@ -15,26 +18,26 @@ int main(int argc, char **argv)
     {
         //COM::sendToAll(&reply, MESSAGE_REPLY);
 
-        for (int i = 0; i < MpiConfig::size; i++)
-        {
-            Request request = Request(MpiConfig::rank, 5, RESOURCE_AGRAFKA);
-            COM::send(i, &request, MESSAGE_REQUEST);
-            COM::logSend(i, &request, MESSAGE_REQUEST);
-        }
+        // for (int i = 0; i < MpiConfig::size; i++)
+        // {
+        //     Request request = Request(MpiConfig::rank, 5, RESOURCE_AGRAFKA);
+        //     COM::send(i, &request, MESSAGE_REQUEST);
+        //     COM::logSend(i, &request, MESSAGE_REQUEST);
 
         while (!end)
         {
-            // vector<Zlecenie> zlecenia = generateZlecenia();
-            // burmistrz.sendToAll(zlecenia);
+            vector<Zlecenie> zlecenia = Zlecenie::randomVector();
+            cout << zlecenia.size() << endl;
+            COM::sendToAll(&zlecenia[0], MESSAGE_INIT, zlecenia.size());
 
-            // int wypelnioneZleceniaCount = 0;
+            int wypelnioneZleceniaCount = 0;
 
-            // while (wypelnioneZleceniaCount < zlecenia.size())
-            // {
-            //     burmistrz.receive(ZLECENIE_COMPLETED_TAG);
+            while (wypelnioneZleceniaCount < zlecenia.size())
+            {
+                COM::receive(MPI_ANY_SOURCE, MESSAGE_COMPLETED);
 
-            //     wypelnioneZleceniaCount++;
-            // }
+                wypelnioneZleceniaCount++;
+            }
         }
     }
     else
@@ -45,7 +48,8 @@ int main(int argc, char **argv)
 
         while (!end)
         {
-            // vector<Zlecenie> zlecenia = receiveZlecenia();
+            void *rawZlecenia = COM::receive(MESSAGE_INIT, BURMISTRZ_ID, Constants::MAX_ZLECENIA_COUNT);
+            vector<Zlecenie> zleceniaMessages((Zlecenie *)rawZlecenia, (Zlecenie *)rawZlecenia + Constants::MAX_ZLECENIA_COUNT);
 
             Resource zlecenia(RESOURCE_ZLECENIE, Constants::MAX_ZLECENIA_COUNT);
             Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
