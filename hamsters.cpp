@@ -16,23 +16,21 @@ int main(int argc, char **argv)
 
     if (MpiConfig::rank == BURMISTRZ_ID)
     {
-        //COM::sendToAll(&reply, MESSAGE_REPLY);
-
-        // for (int i = 0; i < MpiConfig::size; i++)
-        // {
-        //     Request request = Request(MpiConfig::rank, 5, RESOURCE_AGRAFKA);
-        //     COM::send(i, &request, MESSAGE_REQUEST);
-        //     COM::logSend(i, &request, MESSAGE_REQUEST);
+        // Reply reply;
+        // COM::sendToAll(&reply, MESSAGE_REPLY);
 
         while (!end)
         {
-            vector<Zlecenie> zlecenia = Zlecenie::randomVector();
-            cout << zlecenia.size() << endl;
-            COM::sendToAll(&zlecenia[0], MESSAGE_INIT, zlecenia.size());
+            cout << "WYSYLAM\n";
+            Zlecenie *zlecenia = Zlecenie::randomVector();
+
+            //COM::sendToAll(&zlecenia[0], MESSAGE_INIT, zlecenia.size());
+            COM::sendZlecenia(zlecenia);
+            COM::logSend(-1, zlecenia, MESSAGE_INIT);
 
             int wypelnioneZleceniaCount = 0;
 
-            while (wypelnioneZleceniaCount < zlecenia.size())
+            while (wypelnioneZleceniaCount < Constants::MAX_ZLECENIA_COUNT)
             {
                 COM::receive(MPI_ANY_SOURCE, MESSAGE_COMPLETED);
 
@@ -42,26 +40,22 @@ int main(int argc, char **argv)
     }
     else
     {
-        // Reply *reply = (Reply *)COM::receive(MESSAGE_REPLY);
-
-        // reply->print();
-
+        // COM::receive(MESSAGE_REPLY, BURMISTRZ_ID);
+        // Reply reply;
+        // COM::logReceive(BURMISTRZ_ID, &reply, MESSAGE_REPLY);
         while (!end)
         {
-            void *rawZlecenia = COM::receive(MESSAGE_INIT, BURMISTRZ_ID, Constants::MAX_ZLECENIA_COUNT);
+            Zlecenie *rawZlecenia = COM::receiveZlecenia();
+            cout << "*\n";
+            //COM::logReceive(BURMISTRZ_ID, rawZlecenia, MESSAGE_INIT);
+
             vector<Zlecenie> zleceniaMessages((Zlecenie *)rawZlecenia, (Zlecenie *)rawZlecenia + Constants::MAX_ZLECENIA_COUNT);
 
             Resource zlecenia(RESOURCE_ZLECENIE, Constants::MAX_ZLECENIA_COUNT);
             Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
-            while (true)
-                ;
-            // while (...)
-            // { //Repeat until succeeded
-            //     Zlecenie zlecenie = zlecenia.acquire(1);
-            // }
-
+            //Zlecenie zlecenie = zlecenia.acquire(1);
             // while (...)
             // { //Repeat until succeeded
             //     agrafki.acquire(1);

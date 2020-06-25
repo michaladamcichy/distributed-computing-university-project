@@ -137,9 +137,23 @@ namespace Messages
         {
             return "REPLY";
         }
-        else
+        else if (type == MESSAGE_RELEASE)
         {
             return "RELEASE";
         }
+        else if (type == MESSAGE_INIT)
+        {
+            return "INIT";
+        }
+        else if (type == MESSAGE_COMPLETED)
+        {
+            return "COMPLETED";
+        }
+        else if (type == MESSAGE_STOP)
+        {
+            return "STOP";
+        }
+        else
+            return "UNDEFINED";
     }
 } // namespace Messages

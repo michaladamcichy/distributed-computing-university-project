@@ -8,6 +8,7 @@ private:
     int count;
 
 public:
+    Zlecenie() {}
     Zlecenie(int count)
     {
         this->count = count;
@@ -18,12 +19,12 @@ public:
         return Zlecenie(rand() % Constants::MAX_HAMSTERS_IN_ZLECENIE_COUNT);
     }
 
-    static vector<Zlecenie> randomVector()
+    static Zlecenie *randomVector()
     {
-        vector<Zlecenie> zlecenia;
+        Zlecenie *zlecenia = new Zlecenie[Constants::MAX_ZLECENIA_COUNT];
         for (int i = 0; i < Constants::MAX_ZLECENIA_COUNT; i++)
         {
-            zlecenia.push_back(Zlecenie::random());
+            zlecenia[i] = Zlecenie::random();
         }
 
         return zlecenia;
