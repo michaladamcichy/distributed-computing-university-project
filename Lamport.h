@@ -3,9 +3,13 @@
 
 class Lamport
 {
+    static int lastValue;
+
 public:
     static int getTimestamp()
     {
-        return 0; //ALERT
+        return ++lastValue;
     }
 };
+
+int Lamport::lastValue = 0;

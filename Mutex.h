@@ -30,5 +30,11 @@ public:
         pthread_mutex_unlock(&mutex);
     }
 
+    void test()
+    {
+        lock();
+        unlock();
+    }
+
 private:
 };

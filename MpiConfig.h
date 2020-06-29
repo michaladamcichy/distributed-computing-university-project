@@ -22,7 +22,6 @@ namespace MpiConfig
         checkThreadSupport(provided);
         MPI_Comm_size(MPI_COMM_WORLD, &size);
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-        // cout << "MPI initialized\n";
     }
 
     void cleanUp()

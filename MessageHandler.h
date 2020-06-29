@@ -7,7 +7,7 @@ template <class T>
 class MessageHandler
 {
 private:
-    MessageType type;
+    int type;
     vector<T> *messages;
     Mutex *messagesMutex;
 
@@ -18,16 +18,18 @@ private:
 public:
     MessageHandler() {}
 
-    MessageHandler(vector<T> *messages, MessageType type, Mutex *messageMutex)
+    MessageHandler(vector<T> *messages, int type, Mutex *messageMutex)
     {
         init(messages, type, messagesMutex);
     }
 
-    void init(vector<T> *messages, MessageType type, Mutex *messageMutex)
+    void init(vector<T> *messages, int type, Mutex *messagesMutex)
     {
         this->type = type;
         this->messages = messages;
         this->messagesMutex = messagesMutex;
+        //this->messagesMutex->lock();
+        //this->messagesMutex->unlock();
 
         pthread_t t;
 
@@ -46,10 +48,10 @@ private:
     static void *threadFunction(void *args)
     {
         MessageHandler *that = (MessageHandler *)args;
-        //COM::log("Thread started", that->type);
         T buffer;
         while (true) //alert powinno byc end
         {
+            //COM::log("waits for receive", (MessageType)that->type);
             MPI_Recv(
                 &buffer,
                 sizeof(T),
@@ -59,11 +61,18 @@ private:
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
             that->changedFlag = true;
-            COM::logReceive((*((int *)&buffer)), &buffer, that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
+            int sender = (*((int *)&buffer));
+            COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
 
             that->messagesMutex->lock(); //alert
             that->messages->push_back(buffer);
             that->messagesMutex->unlock();
+
+            if (Messages::castToMessage(that->type) == MESSAGE_REQUEST)
+            {
+                Reply reply;
+                COM::send(sender, &reply, MESSAGE_REPLY + Messages::castToResource(that->type));
+            }
         }
     }
 

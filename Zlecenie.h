@@ -4,7 +4,7 @@
 
 class Zlecenie
 {
-private:
+public:
     int count;
 
 public:

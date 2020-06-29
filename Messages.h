@@ -4,10 +4,13 @@
 #include "enums.h"
 #include "MpiConfig.h"
 #include "Zlecenie.h"
+#include "Lamport.h"
 
 class Message
 {
 public:
+    int source;
+    int timestamp;
     Message()
     {
     }
@@ -16,22 +19,35 @@ public:
     {
         return "";
     }
+
+    bool operator<(const Message &d)
+    {
+        if (timestamp < d.timestamp)
+        {
+            return true;
+        }
+        else if (timestamp == d.timestamp)
+        {
+            return source < d.source;
+        }
+        return false;
+    }
 };
 
-class Request // : public Message
+class Request : public Message
 {
 public:
-    int source;
     int units;
     ResourceType type;
 
     Request() {}
 
-    Request(int source, int units, ResourceType type)
+    Request(int units, ResourceType type)
     {
-        this->source = source;
+        this->source = MpiConfig::rank;
         this->units = units;
         this->type = type;
+        this->timestamp = Lamport::getTimestamp();
     }
 
     string toString()
@@ -40,18 +56,13 @@ public:
     }
 };
 
-class Reply // : public Message
+class Reply : public Message
 {
 public:
-    int source;
-    int timestamp;
-
-    Reply() {}
-
-    Reply(int source, int timestamp)
+    Reply()
     {
-        this->source = source;
-        this->timestamp = timestamp;
+        this->source = MpiConfig::rank;
+        this->timestamp = Lamport::getTimestamp();
     }
 
     void print()
@@ -68,20 +79,20 @@ public:
     }
 };
 
-class Release // : public Message
+class Release : public Message
 {
 public:
-    int source;
     int units;
-    int timestamp;
+    int type;
 
     Release() {}
 
-    Release(int source, int units, int timestamp)
+    Release(int units, ResourceType type)
     {
-        this->source = source;
+        this->source = MpiConfig::rank;
         this->units = units;
-        this->timestamp = timestamp;
+        this->timestamp = Lamport::getTimestamp();
+        this->type = type;
     }
 
     string toString()
@@ -92,11 +103,27 @@ public:
 
 namespace Messages
 {
-    unsigned int
-    getSize(int type)
+    int castToMessage(int type)
+    {
+        while (type - 100 >= 0)
+        {
+            type -= 100;
+        }
+
+        return type;
+    }
+
+    int castToResource(int type)
     {
         type /= 100;
         type *= 100;
+        return type;
+    }
+
+    unsigned int
+    getSize(int type)
+    {
+        type = castToMessage(type);
 
         if (type == MESSAGE_REQUEST)
         {
@@ -129,6 +156,8 @@ namespace Messages
     string
     getName(int type)
     {
+        type = castToMessage(type);
+
         if (type == MESSAGE_REQUEST)
         {
             return "REQUEST";

@@ -31,25 +31,34 @@ public:
         this->type = type;
         this->maxResourceAmount = maxResourceAmount;
 
-        requestsHandler.init(&requests, MESSAGE_REQUEST, &requestsMutex);
-        repliesHandler.init(&replies, MESSAGE_REPLY, &repliesMutex);
-        releasesHandler.init(&releases, MESSAGE_RELEASE, &releasesMutex);
+        // requestsMutex.test();
+        requestsHandler.init(&requests, MESSAGE_REQUEST + type, &requestsMutex);
+        // requestsMutex.test();
+        repliesHandler.init(&replies, MESSAGE_REPLY + type, &repliesMutex);
+        releasesHandler.init(&releases, MESSAGE_RELEASE + type, &releasesMutex);
     }
 
     int acquire(int units)
     {
-        Request request(units, Lamport::getTimestamp(), type);
+        COM::log("acquiring\n");
+        Request request(units, type);
         COM::sendToAll(&request, type + MESSAGE_REQUEST);
 
         while (replies.size() < MpiConfig::size - 1)
-            ;
+        {
+        };
+        COM::log("got replies\n");
 
         int sum = 0;
         int returnValue = -1;
 
         requestsMutex.lock();
+        requests.push_back(request);
+        sort(requests.begin(), requests.end());
         requestsHandler.changed();
+
         int lastRequestsSize = requests.size();
+
         for (int i = 0; i < requests.size(); i++)
         {
             sum += requests[i].units;
@@ -73,7 +82,7 @@ public:
                 }
 
                 requestsMutex.lock();
-
+                sort(requests.begin(), requests.end());
                 i = 0;
             }
         }
@@ -86,7 +95,7 @@ public:
 
     void release(int units)
     {
-        Release release(MpiConfig::rank, units, Lamport::getTimestamp());
+        Release release(units, type);
         COM::sendToAll(&release, type + MESSAGE_RELEASE);
     }
 };
