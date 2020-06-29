@@ -44,7 +44,7 @@ public:
         Request request(units, type);
         COM::sendToAll(&request, type + MESSAGE_REQUEST);
 
-        while (replies.size() < MpiConfig::size - 1)
+        while (replies.size() < MpiConfig::size - 2)
         {
         };
         COM::log("got replies\n");

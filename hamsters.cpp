@@ -27,8 +27,11 @@ int main(int argc, char **argv)
             {
                 COM::receive(MESSAGE_COMPLETED, MPI_ANY_SOURCE);
 
+                COM::log("TASK JUST CONFIRMED COMPLETED");
                 wypelnioneZleceniaCount++;
+                cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
             }
+            COM::log("All tasks completed");
         }
     }
     else
@@ -54,7 +57,8 @@ int main(int argc, char **argv)
 
             trucizny.release(zlecenie.count);
             agrafki.release(1);
-            // sendTo(BURMISTRZ_ID, ZLECENIE_COMPLETED_TAG);
+
+            COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
         }
     }
 
