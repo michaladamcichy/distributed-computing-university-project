@@ -46,8 +46,8 @@ int main(int argc, char **argv)
             Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
-            Zlecenie zlecenie = zlecenia.acquire(1);
-            COM::log("zlecenie acquired");
+            Zlecenie zlecenie = zleceniaMessages[zlecenia.acquire(1)];
+            COM::log("    zlecenie acquired: " + to_string(zlecenie.count) + " hamsters");
 
             agrafki.acquire(1);
             COM::log("agrafki acquired");
