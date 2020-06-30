@@ -33,6 +33,7 @@ namespace COM
         {
             cout << "PROCESS " << MpiConfig::rank << "<--- PROCESS " << source << ": ";
             cout << Messages::getName(type) << " ";
+            cout << "timestamp: " << ((Message *)message)->timestamp << " ";
             cout << ((Message *)message)
                         ->toString()
                  << endl; //alert
@@ -85,6 +86,7 @@ namespace COM
         }
         else
         {
+            Lamport::update(*(((int *)data + sizeof(int)))); //wydobywam timestamp z wiadomosci
             logReceive(sender, data, (MessageType)type);
         }
 

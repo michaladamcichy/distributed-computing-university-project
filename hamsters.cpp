@@ -58,6 +58,8 @@ int main(int argc, char **argv)
             trucizny.release(zlecenie.count);
             agrafki.release(1);
 
+            COM::log("Zlecenie completed");
+
             COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
         }
     }
