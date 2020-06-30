@@ -49,7 +49,6 @@ public:
         };
         COM::log("got replies\n");
 
-        int sum = 0;
         int returnValue = -1;
 
         requestsMutex.lock();
@@ -59,19 +58,26 @@ public:
 
         int lastRequestsSize = requests.size();
 
-        for (int i = 0; i < requests.size(); i++)
+        bool acquired = false;
+
+        while (!acquired)
         {
-            sum += requests[i].units;
-            if ((requests[i].source == MpiConfig::rank) && units <= (maxResourceAmount - sum))
+            int sum = 0;
+            int i = 0;
+            while ((requests[i].source != MpiConfig::rank))
+            {
+                sum += requests[i].units;
+                i++;
+            }
+
+            if (units <= (maxResourceAmount - sum))
             {
                 COM::log("acquired resource");
-
+                acquired = true;
                 if (type == RESOURCE_ZLECENIE)
                 {
                     returnValue = i;
                 }
-
-                break;
             }
             else
             {
@@ -83,9 +89,9 @@ public:
 
                 requestsMutex.lock();
                 sort(requests.begin(), requests.end());
-                i = 0;
             }
         }
+
         requestsMutex.unlock();
 
         replies.clear();
