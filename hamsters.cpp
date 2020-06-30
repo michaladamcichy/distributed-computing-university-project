@@ -46,17 +46,25 @@ int main(int argc, char **argv)
             Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
+            //zlecenieIndex = zlecenia.acquire(1);
+            //Zlecenie zlecenie = zleceniaMessages[zlecenieIndex];
             Zlecenie zlecenie = zleceniaMessages[zlecenia.acquire(1)];
-            COM::log("    zlecenie acquired: " + to_string(zlecenie.count) + " hamsters");
+            //COM::log("    zlecenie acquired: " + to_string(zlecenie.count) + " hamsters");
 
             agrafki.acquire(1);
-            COM::log("agrafki acquired");
+            COM::log("agrafka acquired");
+            cout << "agrafka acquired\n";
 
             trucizny.acquire(zlecenie.count);
-            COM::log("trucizny acquired");
+            //COM::log(to_string(zlecenie.count) + " trucizny acquired");
+            //cout << to_string(zlecenie.count) + " trucizny acquired" << endl;
 
             trucizny.release(zlecenie.count);
+            //cout << to_string(zlecenie.count) + " trucizny released" << endl;
+
             agrafki.release(1);
+            // COM::log("agrafka released");
+            cout << "agrafka released\n";
 
             COM::log("Zlecenie completed");
 
