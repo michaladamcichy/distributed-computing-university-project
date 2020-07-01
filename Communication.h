@@ -19,11 +19,8 @@ namespace COM
     {
         if (logEnabled)
         {
-            cout << "PROCESS " << MpiConfig::rank << "-> PROCESS " << target << ": ";
-            cout << Messages::getName(type) << " ";
-            cout << ((Message *)message)
-                        ->toString()
-                 << endl; //alert
+            cout << "TIMESTAMP: " << ((Message *)message)->timestamp << " | PROCESS ID: " << MpiConfig::rank << " --> send to PROCESS ID: " << target << " | ";
+            cout << Messages::getName(type) << " " << endl; //alert
         }
     }
 
@@ -31,12 +28,8 @@ namespace COM
     {
         if (logEnabled)
         {
-            cout << "PROCESS " << MpiConfig::rank << "<--- PROCESS " << source << ": ";
-            cout << Messages::getName(type) << " ";
-            cout << "timestamp: " << ((Message *)message)->timestamp << " ";
-            cout << ((Message *)message)
-                        ->toString()
-                 << endl; //alert
+            cout << "TIMESTAMP: " << ((Message *)message)->timestamp << " | PROCESS ID: " << MpiConfig::rank << " --> reply to PROCESS ID: " << source << " | ";
+            cout << Messages::getName(type) << " " << endl; //alert
         }
     }
 
