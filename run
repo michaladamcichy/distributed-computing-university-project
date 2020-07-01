@@ -2,4 +2,4 @@ filename="hamsters"
 pkill $filename
 rm hamsters
 mpic++ -std=c++11 $filename.cpp -o $filename -lpthread
-mpirun -np 10 $filename
+mpirun -np 6 $filename

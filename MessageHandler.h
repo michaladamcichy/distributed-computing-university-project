@@ -11,6 +11,8 @@ private:
     vector<T> *messages;
     Mutex *messagesMutex;
 
+    MessageHandler<Request> *otherMessageHandler = NULL;
+
     bool changedFlag = false;
 
     bool end = false;
@@ -18,16 +20,21 @@ private:
 public:
     MessageHandler() {}
 
-    MessageHandler(vector<T> *messages, int type, Mutex *messageMutex)
+    MessageHandler(vector<T> *messages, int type, Mutex *messageMutex, MessageHandler<Request> *otherMessageHandler = NULL)
     {
-        init(messages, type, messagesMutex);
+        init(messages, type, messagesMutex, otherMessageHandler);
     }
 
-    void init(vector<T> *messages, int type, Mutex *messagesMutex)
+    void init(vector<T> *messages, int type, Mutex *messagesMutex, MessageHandler<Request> *otherMessageHandler = NULL)
     {
         this->type = type;
         this->messages = messages;
         this->messagesMutex = messagesMutex;
+        this->otherMessageHandler = otherMessageHandler;
+
+        // cout << messages << endl;
+        // cout << messagesMutex << endl;
+        // cout << otherMessageHandler << endl;
         //this->messagesMutex->lock();
         //this->messagesMutex->unlock();
 
@@ -42,6 +49,22 @@ public:
         if (changedFlag)
             changedFlag = false;
         return answer;
+    }
+
+    void remove(int sender)
+    {
+        messagesMutex->lock();
+
+        for (int i = 0; i < messages->size(); i++)
+        {
+            if ((*messages)[i].source == sender)
+            {
+                messages->erase(messages->begin() + i);
+                break;
+            }
+        }
+        changedFlag = true;
+        messagesMutex->unlock();
     }
 
 private:
@@ -60,6 +83,7 @@ private:
                 that->type,
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
+            //cout << &buffer << endl;
             that->changedFlag = true;
             int sender = (*((int *)&buffer));
             COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
@@ -73,14 +97,17 @@ private:
                 Reply reply;
                 COM::send(sender, &reply, MESSAGE_REPLY + Messages::castToResource(that->type));
             }
+            else if (Messages::castToMessage(that->type) == MESSAGE_RELEASE)
+            {
+                if (that->otherMessageHandler == 0)
+                {
+                    cout << "cos tu jest ostro nie halo\n";
+                }
+                else
+                {
+                    that->otherMessageHandler->remove(sender);
+                }
+            }
         }
-    }
-
-    void remove(int index)
-    {
-        messagesMutex->lock();
-        messages.erase(messages.begin() + index);
-        changedFlag = true;
-        messagesMutex->unlock();
     }
 };

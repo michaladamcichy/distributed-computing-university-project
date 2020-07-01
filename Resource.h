@@ -35,7 +35,7 @@ public:
         requestsHandler.init(&requests, MESSAGE_REQUEST + type, &requestsMutex);
         // requestsMutex.test();
         repliesHandler.init(&replies, MESSAGE_REPLY + type, &repliesMutex);
-        releasesHandler.init(&releases, MESSAGE_RELEASE + type, &releasesMutex);
+        releasesHandler.init(&releases, MESSAGE_RELEASE + type, &releasesMutex, &requestsHandler);
     }
 
     int acquire(int units)
@@ -86,6 +86,7 @@ public:
                 while (!requestsHandler.changed())
                 {
                 }
+                cout << "Retrying \n";
 
                 requestsMutex.lock();
                 sort(requests.begin(), requests.end());
