@@ -7,7 +7,7 @@
 
 namespace COM
 {
-    bool logEnabled = false;
+    bool logEnabled = true;
 
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
