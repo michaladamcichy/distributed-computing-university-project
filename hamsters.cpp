@@ -9,14 +9,14 @@
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    bool end;
+    bool end = false;
 
     MpiConfig::init(argc, argv);
 
     if (MpiConfig::rank == BURMISTRZ_ID)
     {
-        // while (!end)
-        // {
+        while (!end)
+        {
         Zlecenie *zlecenia = Zlecenie::randomVector();
 
         COM::sendToAll(zlecenia, MESSAGE_INIT, Constants::MAX_ZLECENIA_COUNT);
@@ -32,12 +32,13 @@ int main(int argc, char **argv)
             cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
         }
         COM::log("All tasks completed");
-        // }
+		end = true;
+        }
     }
     else
     {
-        // while (!end)
-        // {
+        while (!end)
+        {
         Zlecenie *rawZlecenia = (Zlecenie *)COM::receive(MESSAGE_INIT, BURMISTRZ_ID, Constants::MAX_ZLECENIA_COUNT);
 
         vector<Zlecenie> zleceniaMessages(rawZlecenia, rawZlecenia + Constants::MAX_ZLECENIA_COUNT);
@@ -69,10 +70,10 @@ int main(int argc, char **argv)
         COM::log("Zlecenie completed");
 
         COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
-        // }
+        }
 
-        while (true) //alert
-            ;
+        //while (true) //alert
+        //    ;
     }
 
     MpiConfig::cleanUp();
