@@ -5,6 +5,7 @@
 #include "Communication.h"
 #include "Constants.h"
 #include "Zlecenie.h"
+#include "unistd.h"
 
 int main(int argc, char **argv)
 {
@@ -71,6 +72,8 @@ int main(int argc, char **argv)
 
         COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
         }
+		
+		sleep(3);
 
         //while (true) //alert
         //    ;
