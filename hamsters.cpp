@@ -72,8 +72,6 @@ int main(int argc, char **argv)
 
         COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
         }
-		
-		sleep(3);
 
         //while (true) //alert
         //    ;
