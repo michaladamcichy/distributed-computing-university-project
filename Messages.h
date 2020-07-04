@@ -49,7 +49,14 @@ public:
         this->type = type;
         this->timestamp = Lamport::getTimestamp();
 		
-		cout << "REQUEST " << type << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
+		string typeString = "";
+		switch(type) {
+			case RESAOURCE_ZLECENIE: { typeString = "zlecenie"; break; }
+			case RESAOURCE_AGRAFKA: { typeString = "agrafka"; break; }
+			case RESAOURCE_TRUCIZNA: { typeString = "trucizna"; break; }
+		}
+		
+		cout << "REQUEST " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
     }
 
     string toString()
