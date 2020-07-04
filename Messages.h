@@ -51,9 +51,9 @@ public:
 		
 		string typeString = "";
 		switch(type) {
-			case RESOURCE_ZLECENIE: { typeString = "zlecenie"; break; }
-			case RESOURCE_AGRAFKA: { typeString = "agrafka"; break; }
-			case RESOURCE_TRUCIZNA: { typeString = "trucizna"; break; }
+			case 100: { typeString = "zlecenie"; break; }
+			case 200: { typeString = "agrafka"; break; }
+			case 300: { typeString = "trucizna"; break; }
 		}
 		
 		cout << "REQUEST " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
