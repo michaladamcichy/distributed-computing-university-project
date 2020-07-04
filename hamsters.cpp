@@ -58,6 +58,7 @@ int main(int argc, char **argv)
         cout << "agrafka acquired\n";
 
         trucizny.acquire(zlecenie.count);
+		cout << "trucizny acquired\n";
         //COM::log(to_string(zlecenie.count) + " trucizny acquired");
         //cout << to_string(zlecenie.count) + " trucizny acquired" << endl;
 
