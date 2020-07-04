@@ -79,7 +79,7 @@ public:
                 {
                     returnValue = i;
                 }
-				cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << '\n";
+				cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << "\n";
             }
             else
             {
