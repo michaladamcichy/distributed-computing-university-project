@@ -49,7 +49,7 @@ public:
         this->type = type;
         this->timestamp = Lamport::getTimestamp();
 		
-		cout << "REQUEST " << type << ": ID(" << this->source << "), TIMESTAMP(" << this->timestamp << ") UNITS(" << this->units << ")\n"; 
+		cout << "REQUEST " << type << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
     }
 
     string toString()
