@@ -48,6 +48,8 @@ public:
         this->units = units;
         this->type = type;
         this->timestamp = Lamport::getTimestamp();
+		
+		cout << "REQUEST " << type << ": ID(" << this->source << "), TIMESTAMP(" << this->timestamp << ") UNITS(" << this->units << ")\n"; 
     }
 
     string toString()

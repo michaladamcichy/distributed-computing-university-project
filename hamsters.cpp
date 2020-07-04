@@ -18,22 +18,22 @@ int main(int argc, char **argv)
     {
         while (!end)
         {
-        Zlecenie *zlecenia = Zlecenie::randomVector();
+			Zlecenie *zlecenia = Zlecenie::randomVector();
 
-        COM::sendToAll(zlecenia, MESSAGE_INIT, Constants::MAX_ZLECENIA_COUNT);
+			COM::sendToAll(zlecenia, MESSAGE_INIT, Constants::MAX_ZLECENIA_COUNT);
 
-        int wypelnioneZleceniaCount = 0;
+			int wypelnioneZleceniaCount = 0;
 
-        while (wypelnioneZleceniaCount < Constants::MAX_ZLECENIA_COUNT)
-        {
-            COM::receive(MESSAGE_COMPLETED, MPI_ANY_SOURCE);
+			while (wypelnioneZleceniaCount < Constants::MAX_ZLECENIA_COUNT)
+			{
+				COM::receive(MESSAGE_COMPLETED, MPI_ANY_SOURCE);
 
-            COM::log("TASK JUST CONFIRMED COMPLETED");
-            wypelnioneZleceniaCount++;
-            cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
-        }
-        COM::log("All tasks completed");
-		end = true;
+				COM::log("TASK JUST CONFIRMED COMPLETED");
+				wypelnioneZleceniaCount++;
+				cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
+			}
+			COM::log("All tasks completed");
+			end = true;
         }
     }
     else
@@ -55,10 +55,9 @@ int main(int argc, char **argv)
 
         agrafki.acquire(1);
         COM::log("agrafka acquired");
-        cout << "agrafka acquired\n";
+        //cout << "agrafka acquired\n";
 
         trucizny.acquire(zlecenie.count);
-		cout << "trucizny acquired\n";
         //COM::log(to_string(zlecenie.count) + " trucizny acquired");
         //cout << to_string(zlecenie.count) + " trucizny acquired" << endl;
 
@@ -67,7 +66,7 @@ int main(int argc, char **argv)
 
         agrafki.release(1);
         // COM::log("agrafka released");
-        cout << "agrafka released\n";
+        //cout << "agrafka released\n";
 
         COM::log("Zlecenie completed");
 
