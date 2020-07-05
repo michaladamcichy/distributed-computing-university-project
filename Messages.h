@@ -105,6 +105,7 @@ public:
         this->timestamp = Lamport::getTimestamp();
         this->type = type;
 		
+		string typeString = "";
 		switch(type) {
 			case 100: { typeString = "zlecenie"; break; }
 			case 200: { typeString = "agrafka"; break; }
