@@ -72,6 +72,8 @@ public:
     {
         this->source = MpiConfig::rank;
         this->timestamp = Lamport::getTimestamp();
+		
+		cout << "REPLY " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n"; 
     }
 
     void print()
@@ -102,6 +104,8 @@ public:
         this->units = units;
         this->timestamp = Lamport::getTimestamp();
         this->type = type;
+		
+		cout << "RELEASE " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
     }
 
     string toString()
