@@ -16,7 +16,7 @@ public:
 
     static Zlecenie random()
     {
-        return Zlecenie(rand() % Constants::MAX_HAMSTERS_IN_ZLECENIE_COUNT);
+        return Zlecenie(rand() % Constants::MAX_HAMSTERS_IN_ZLECENIE_COUNT + 1);
     }
 
     static Zlecenie *randomVector()
