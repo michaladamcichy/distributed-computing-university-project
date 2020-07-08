@@ -69,6 +69,7 @@ public:
                 sum += requests[i].units;
                 i++;
             }
+			
 
             if (units <= (maxResourceAmount - sum))
             {
@@ -78,6 +79,7 @@ public:
                 {
                     returnValue = i;
                 }
+				cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << "\n";
             }
             else
             {
@@ -86,7 +88,7 @@ public:
                 while (!requestsHandler.changed())
                 {
                 }
-                cout << "Retrying \n";
+                cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- retrying (need " << units << ")\n";
 
                 requestsMutex.lock();
                 sort(requests.begin(), requests.end());

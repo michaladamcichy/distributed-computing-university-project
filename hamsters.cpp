@@ -5,39 +5,41 @@
 #include "Communication.h"
 #include "Constants.h"
 #include "Zlecenie.h"
+#include "unistd.h"
 
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    bool end;
+    bool end = false;
 
     MpiConfig::init(argc, argv);
 
     if (MpiConfig::rank == BURMISTRZ_ID)
     {
-        // while (!end)
-        // {
-        Zlecenie *zlecenia = Zlecenie::randomVector();
-
-        COM::sendToAll(zlecenia, MESSAGE_INIT, Constants::MAX_ZLECENIA_COUNT);
-
-        int wypelnioneZleceniaCount = 0;
-
-        while (wypelnioneZleceniaCount < Constants::MAX_ZLECENIA_COUNT)
+        while (!end)
         {
-            COM::receive(MESSAGE_COMPLETED, MPI_ANY_SOURCE);
+			Zlecenie *zlecenia = Zlecenie::randomVector();
 
-            COM::log("TASK JUST CONFIRMED COMPLETED");
-            wypelnioneZleceniaCount++;
-            cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
+			COM::sendToAll(zlecenia, MESSAGE_INIT, Constants::MAX_ZLECENIA_COUNT);
+
+			int wypelnioneZleceniaCount = 0;
+
+			while (wypelnioneZleceniaCount < Constants::MAX_ZLECENIA_COUNT)
+			{
+				COM::receive(MESSAGE_COMPLETED, MPI_ANY_SOURCE);
+
+				COM::log("TASK JUST CONFIRMED COMPLETED");
+				wypelnioneZleceniaCount++;
+				cout << "Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
+			}
+			COM::log("All tasks completed");
+			end = true;
         }
-        COM::log("All tasks completed");
-        // }
     }
     else
     {
-        // while (!end)
-        // {
+        while (!end)
+        {
         Zlecenie *rawZlecenia = (Zlecenie *)COM::receive(MESSAGE_INIT, BURMISTRZ_ID, Constants::MAX_ZLECENIA_COUNT);
 
         vector<Zlecenie> zleceniaMessages(rawZlecenia, rawZlecenia + Constants::MAX_ZLECENIA_COUNT);
@@ -53,7 +55,7 @@ int main(int argc, char **argv)
 
         agrafki.acquire(1);
         COM::log("agrafka acquired");
-        cout << "agrafka acquired\n";
+        //cout << "agrafka acquired\n";
 
         trucizny.acquire(zlecenie.count);
         //COM::log(to_string(zlecenie.count) + " trucizny acquired");
@@ -64,15 +66,15 @@ int main(int argc, char **argv)
 
         agrafki.release(1);
         // COM::log("agrafka released");
-        cout << "agrafka released\n";
+        //cout << "agrafka released\n";
 
         COM::log("Zlecenie completed");
 
         COM::send(BURMISTRZ_ID, NULL, MESSAGE_COMPLETED);
-        // }
+        }
 
-        while (true) //alert
-            ;
+        //while (true) //alert
+        //    ;
     }
 
     MpiConfig::cleanUp();
