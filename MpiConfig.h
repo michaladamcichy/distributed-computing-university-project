@@ -11,7 +11,7 @@ namespace MpiConfig
     {
         if (provided != MPI_THREAD_MULTIPLE)
         {
-            cout << "Threads NOT supported!!!\n";
+            //cout <<"Threads NOT supported!!!\n";
         }
     }
 

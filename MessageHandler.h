@@ -32,9 +32,9 @@ public:
         this->messagesMutex = messagesMutex;
         this->otherMessageHandler = otherMessageHandler;
 
-        // cout << messages << endl;
-        // cout << messagesMutex << endl;
-        // cout << otherMessageHandler << endl;
+        // //cout <<messages << endl;
+        // //cout <<messagesMutex << endl;
+        // //cout <<otherMessageHandler << endl;
         //this->messagesMutex->lock();
         //this->messagesMutex->unlock();
 
@@ -83,7 +83,7 @@ private:
                 that->type,
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
-            //cout << &buffer << endl;
+            ////cout <<&buffer << endl;
             that->changedFlag = true;
             int sender = (*((int *)&buffer));
             COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
@@ -101,7 +101,7 @@ private:
             {
                 if (that->otherMessageHandler == 0)
                 {
-                    cout << "cos tu jest ostro nie halo\n";
+                    //cout <<"cos tu jest ostro nie halo\n";
                 }
                 else
                 {

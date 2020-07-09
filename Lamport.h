@@ -16,6 +16,11 @@ public:
         return value;
     }
 
+    static int readTimestamp()
+    {
+        return lastValue;
+    }
+
     static void update(int incomingTimestamp)
     {
         mutex.lock();

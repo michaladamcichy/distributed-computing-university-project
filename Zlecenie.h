@@ -1,17 +1,20 @@
 #pragma once
 #include "stdafx.h"
 #include "Constants.h"
+#include "Lamport.h"
 
 class Zlecenie
 {
 public:
     int count;
+    int timestamp;
 
 public:
     Zlecenie() {}
     Zlecenie(int count)
     {
         this->count = count;
+        this->timestamp = Lamport::getTimestamp();
     }
 
     static Zlecenie random()

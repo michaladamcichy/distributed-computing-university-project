@@ -12,14 +12,15 @@ namespace COM
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
         if (logEnabled)
-            cout << "PROCESS " << MpiConfig::rank << ": " << message << " " << Messages::getName(type) << endl;
+            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
     }
 
     void logSend(int target, const void *message, MessageType type)
     {
         if (logEnabled)
         {
-            cout << "PROCESS " << MpiConfig::rank << "-> PROCESS " << target << ": ";
+            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : "
+                 << "-> PROCESS " << target << ": ";
             cout << Messages::getName(type) << " ";
             cout << ((Message *)message)
                         ->toString()
@@ -31,7 +32,8 @@ namespace COM
     {
         if (logEnabled)
         {
-            cout << "PROCESS " << MpiConfig::rank << "<--- PROCESS " << source << ": ";
+            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : "
+                 << "<--- PROCESS " << source << ": ";
             cout << Messages::getName(type) << " ";
             cout << "timestamp: " << ((Message *)message)->timestamp << " ";
             cout << ((Message *)message)
@@ -86,7 +88,14 @@ namespace COM
         }
         else
         {
-            Lamport::update(*(((int *)data + sizeof(int)))); //wydobywam timestamp z wiadomosci
+            int timestamp = *(((int *)data + sizeof(int)));
+            int sender = *(((int *)data));
+            // if (timestamp > 1000)
+            // {
+            //cout << timestamp << endl;
+            cout << sender << endl;
+            // }
+            Lamport::update(timestamp); //wydobywam timestamp z wiadomosci
             logReceive(sender, data, (MessageType)type);
         }
 

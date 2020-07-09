@@ -79,7 +79,7 @@ public:
                 {
                     returnValue = i;
                 }
-				cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << "\n";
+				//cout <<"Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << "\n";
             }
             else
             {
@@ -88,7 +88,7 @@ public:
                 while (!requestsHandler.changed())
                 {
                 }
-                cout << "Available resource " << type << ": " << maxResourceAmount - sum << " <-- retrying (need " << units << ")\n";
+                //cout <<"Available resource " << type << ": " << maxResourceAmount - sum << " <-- retrying (need " << units << ")\n";
 
                 requestsMutex.lock();
                 sort(requests.begin(), requests.end());

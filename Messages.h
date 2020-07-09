@@ -10,7 +10,7 @@ class Message
 {
 public:
     int source;
-    int timestamp;
+    int timestamp = 0;
     Message()
     {
     }
@@ -48,15 +48,28 @@ public:
         this->units = units;
         this->type = type;
         this->timestamp = Lamport::getTimestamp();
-		
-		string typeString = "";
-		switch(type) {
-			case 100: { typeString = "zlecenie"; break; }
-			case 200: { typeString = "agrafka"; break; }
-			case 300: { typeString = "trucizna"; break; }
-		}
-		
-		cout << "REQUEST " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
+
+        string typeString = "";
+        switch (type)
+        {
+        case 100:
+        {
+            typeString = "zlecenie";
+            break;
+        }
+        case 200:
+        {
+            typeString = "agrafka";
+            break;
+        }
+        case 300:
+        {
+            typeString = "trucizna";
+            break;
+        }
+        }
+
+        //cout <<"REQUEST " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n";
     }
 
     string toString()
@@ -72,16 +85,39 @@ public:
     {
         this->source = MpiConfig::rank;
         this->timestamp = Lamport::getTimestamp();
-		
-		cout << "REPLY " << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n"; 
+
+        //cout <<"REPLY " << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n";
     }
 
     void print()
     {
-        cout << MpiConfig::rank << endl;
-        cout << source << endl;
-        cout << timestamp << endl
-             << endl;
+        //cout <<MpiConfig::rank << endl;
+        //cout <<source << endl;
+        //cout <<timestamp << endl
+        //<< endl;
+    }
+
+    string toString()
+    {
+        return "";
+    }
+};
+
+class Completed : public Message
+{
+public:
+    Completed()
+    {
+        this->source = MpiConfig::rank;
+        this->timestamp = Lamport::getTimestamp();
+    }
+
+    void print()
+    {
+        //cout <<MpiConfig::rank << endl;
+        //cout <<source << endl;
+        //cout <<timestamp << endl
+        //<< endl;
     }
 
     string toString()
@@ -104,15 +140,28 @@ public:
         this->units = units;
         this->timestamp = Lamport::getTimestamp();
         this->type = type;
-		
-		string typeString = "";
-		switch(type) {
-			case 100: { typeString = "zlecenie"; break; }
-			case 200: { typeString = "agrafka"; break; }
-			case 300: { typeString = "trucizna"; break; }
-		}
-		
-		cout << "RELEASE " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n"; 
+
+        string typeString = "";
+        switch (type)
+        {
+        case 100:
+        {
+            typeString = "zlecenie";
+            break;
+        }
+        case 200:
+        {
+            typeString = "agrafka";
+            break;
+        }
+        case 300:
+        {
+            typeString = "trucizna";
+            break;
+        }
+        }
+
+        //cout <<"RELEASE " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n";
     }
 
     string toString()
@@ -167,7 +216,7 @@ namespace Messages
         }
         else if (type == MESSAGE_COMPLETED)
         {
-            return 0;
+            return sizeof(Completed);
         }
 
         return 0;
