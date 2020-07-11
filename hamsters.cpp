@@ -33,6 +33,7 @@ int main(int argc, char **argv)
                 //cout <<"Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
             }
             COM::log("All tasks completed");
+            cout << "Udalo sie!\n";
             end = true;
         }
     }
@@ -69,8 +70,10 @@ int main(int argc, char **argv)
             ////cout <<"agrafka released\n";
 
             COM::log("Zlecenie completed");
-
             Completed message;
+            // cout << message.timestamp << endl;
+            // cout << message.source << endl;
+
             COM::send(BURMISTRZ_ID, &message, MESSAGE_COMPLETED);
         }
 

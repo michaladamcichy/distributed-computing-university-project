@@ -1,0 +1,50 @@
+T1|P4 : <--- PROCESS 3: INIT timestamp: 1 
+T2|P4 : <--- PROCESS 2: REQUEST timestamp: 5 
+T2|P4 : acquiring
+ UNDEFINED
+T5|P4 : <--- PROCESS 1: REQUEST timestamp: 2 
+T7|P4 : <--- PROCESS 3: REQUEST timestamp: 5 
+T8|P4 : <--- PROCESS 5: REQUEST timestamp: 3 
+T8|P4 : <--- PROCESS 1: REPLY timestamp: 8 
+T9|P4 : got replies
+ UNDEFINED
+T9|P4 : <--- PROCESS 3: REPLY timestamp: 8 
+T9|P4 : acquired resource UNDEFINED
+T9|P4 : acquiring
+ UNDEFINED
+T9|P4 : <--- PROCESS 5: REPLY timestamp: 9 
+T9|P4 : <--- PROCESS 2: REQUEST timestamp: 8 
+T11|P4 : <--- PROCESS 1: REQUEST timestamp: 10 
+T12|P4 : <--- PROCESS 3: REQUEST timestamp: 10 
+T13|P4 : <--- PROCESS 5: REQUEST timestamp: 10 
+T14|P4 : <--- PROCESS 2: REQUEST timestamp: 10 
+T12|P4 : <--- PROCESS 1: REPLY timestamp: 12 
+T15|P4 : got replies
+ UNDEFINED
+T15|P4 : <--- PROCESS 3: REPLY timestamp: 13 
+T15|P4 : <--- PROCESS 5: REPLY timestamp: 12 
+T15|P4 : <--- PROCESS 2: REPLY timestamp: 11 
+T15|P4 : <--- PROCESS 2: REPLY timestamp: 12 
+T15|P4 : <--- PROCESS 2: RELEASE timestamp: 16 
+T15|P4 : <--- PROCESS 2: RELEASE timestamp: 17 
+T15|P4 : <--- PROCESS 1: REQUEST timestamp: 16 
+T16|P4 : <--- PROCESS 3: REQUEST timestamp: 16 
+T17|P4 : <--- PROCESS 1: RELEASE timestamp: 18 
+T17|P4 : <--- PROCESS 1: RELEASE timestamp: 19 
+T17|P4 : acquired resource UNDEFINED
+T17|P4 : agrafka acquired UNDEFINED
+T17|P4 : acquiring
+ UNDEFINED
+T18|P4 : <--- PROCESS 1: REPLY timestamp: 21 
+T18|P4 : <--- PROCESS 5: REPLY timestamp: 18 
+T18|P4 : <--- PROCESS 2: REPLY timestamp: 21 
+T18|P4 : <--- PROCESS 3: REPLY timestamp: 20 
+T18|P4 : got replies
+ UNDEFINED
+T18|P4 : <--- PROCESS 3: RELEASE timestamp: 19 
+T18|P4 : <--- PROCESS 3: RELEASE timestamp: 18 
+T18|P4 : acquired resource UNDEFINED
+T20|P4 : Zlecenie completed UNDEFINED
+T21|P4 : <--- PROCESS 5: REQUEST timestamp: 19 
+T22|P4 : <--- PROCESS 5: RELEASE timestamp: 20 
+T22|P4 : <--- PROCESS 5: RELEASE timestamp: 21 

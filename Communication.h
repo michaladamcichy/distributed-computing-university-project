@@ -8,38 +8,66 @@
 namespace COM
 {
     bool logEnabled = false;
+    Mutex logMutex;
+    ofstream logFile("log" + std::to_string(MpiConfig::rank), std::ofstream::out | std::ofstream::trunc);
 
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
+        int timestamp = Lamport::readTimestamp();
+        logMutex.lock();
+        if (logFile.is_open())
+            logFile.close();
+
+        logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
         if (logEnabled)
-            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+        {
+            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+        }
+        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+        logFile.close();
+        logMutex.unlock();
     }
 
     void logSend(int target, const void *message, MessageType type)
     {
+        int timestamp = Lamport::readTimestamp();
+        logMutex.lock();
+        if (logFile.is_open())
+            logFile.close();
+
+        logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
+
         if (logEnabled)
         {
-            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : "
-                 << "-> PROCESS " << target << ": ";
-            cout << Messages::getName(type) << " ";
-            cout << ((Message *)message)
-                        ->toString()
-                 << endl; //alert
+            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+                 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
         }
+        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+                << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
+        logFile.close();
+        logMutex.unlock();
     }
 
     void logReceive(int source, const void *message, MessageType type)
     {
+        int timestamp = Lamport::readTimestamp();
+        logMutex.lock();
+        if (logFile.is_open())
+            logFile.close();
+
+        logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
+
         if (logEnabled)
         {
-            cout << "T" << Lamport::readTimestamp() << "|P" << MpiConfig::rank << " : "
-                 << "<--- PROCESS " << source << ": ";
-            cout << Messages::getName(type) << " ";
-            cout << "timestamp: " << ((Message *)message)->timestamp << " ";
-            cout << ((Message *)message)
-                        ->toString()
-                 << endl; //alert
+            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+                 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
+                 << "timestamp: " << ((Message *)message)->timestamp << " " << ((Message *)message)->toString() << endl; //alert
         }
+        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+                << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
+                << "timestamp: " << ((Message *)message)->timestamp << " " << ((Message *)message)->toString() << endl; //alert
+        logFile.close();
+        logMutex.unlock();
     }
 
     void send(int target, void *message, int type, int count = 1)
@@ -57,7 +85,7 @@ namespace COM
         }
         else
         {
-            logSend(target, message, (MessageType)type);
+            //logSend(target, message, (MessageType)type);
         }
     }
 
@@ -88,17 +116,32 @@ namespace COM
         }
         else
         {
-            int timestamp = *(((int *)data + sizeof(int)));
-            int sender = *(((int *)data));
+            int timestamp, sender;
+
+            timestamp = (*((Message *)data)).timestamp;
+            sender = (*((Message *)data)).source;
+            // if (Messages::castToMessage(type) == MESSAGE_COMPLETED)
+            // {
+            //     timestamp = 0;
+            //     sender = 0;
+            // }
+            // else
+            // {
+            // timestamp = *(((int *)data + sizeof(int)));
+            // sender = *(((int *)data));
+            // // }
+            //int timestamp = *(((int *)data + sizeof(int)));
+            //int sender = *(((int *)data));
             // if (timestamp > 1000)
             // {
-            //cout << timestamp << endl;
+            cout
+                << timestamp << endl;
             cout << sender << endl;
-            // }
+
             Lamport::update(timestamp); //wydobywam timestamp z wiadomosci
             logReceive(sender, data, (MessageType)type);
         }
 
         return data;
-    }
-}; // namespace COM
+    } // namespace COM
+};    // namespace COM
