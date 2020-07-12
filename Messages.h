@@ -144,6 +144,8 @@ public:
     {
         this->source = MpiConfig::rank;
         this->timestamp = Lamport::getTimestamp();
+		
+		//cout <<"COMPLETED " << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n";
     }
 
     void print()

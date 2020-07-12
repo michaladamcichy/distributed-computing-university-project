@@ -52,7 +52,7 @@ public:
         int returnValue = -1;
 
         requestsMutex.lock();
-        COM::log("requestsMutex.lock()");
+        //COM::log("requestsMutex.lock()");
         requests.push_back(request);
         sort(requests.begin(), requests.end());
         requestsHandler.changed();
@@ -88,7 +88,7 @@ public:
                 COM::log("Not enoough. Retrying\n");
                 COM::log("");
                 requestsMutex.unlock();
-                COM::log("requestsMutex.unlock()");
+                //COM::log("requestsMutex.unlock()");
 
                 COM::log("waiting for change");
                 while (!requestsHandler.changed())
@@ -110,7 +110,7 @@ public:
         COM::log("exited acquiring loop");
 
         requestsMutex.unlock();
-        COM::log("requestsMutex.unlock()");
+        //COM::log("requestsMutex.unlock()");
 
         replies.clear();
 

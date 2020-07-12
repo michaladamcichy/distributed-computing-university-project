@@ -7,7 +7,7 @@
 
 namespace COM
 {
-    bool logEnabled = false;
+    bool logEnabled = true;
     Mutex logMutex;
     ofstream logFile("log" + std::to_string(MpiConfig::rank), std::ofstream::out | std::ofstream::trunc);
 
@@ -41,8 +41,35 @@ namespace COM
 
         if (logEnabled)
         {
+			if(Messages::getName(type) == MESSAGE_REQUEST) {
+				ResourceType resourceType = ((Request *)message)->type;
+				string typeString = "";
+				switch (resourceType)
+				{
+					case 100:
+					{
+						typeString = "zlecenie";
+						break;
+					}
+					case 200:
+					{
+						typeString = "agrafka";
+						break;
+					}
+					case 300:
+					{
+						typeString = "trucizna";
+						break;
+					}
+				}
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+                 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl; //alert
+			}
+			
+			/*
             cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                  << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
+				 */
         }
         logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
@@ -61,7 +88,7 @@ namespace COM
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
 
         if (logEnabled)
-        {
+        {			
             cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                  << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
                  << "timestamp: " << ((Message *)message)->timestamp << " " << ((Message *)message)->toString() << endl; //alert

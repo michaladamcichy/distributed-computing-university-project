@@ -8,4 +8,7 @@ namespace Constants
     const int MAX_TRUCIZNY_COUNT = 5;
 
     const int MAX_HAMSTERS_IN_ZLECENIE_COUNT = 5;
+	
+	const bool GENERATE_ZLECENIA_INF = false;
+	
 } // namespace Constants

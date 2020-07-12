@@ -33,8 +33,10 @@ int main(int argc, char **argv)
                 //cout <<"Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
             }
             COM::log("All tasks completed");
-            cout << "Udalo sie!\n";
-            end = true;
+            cout << "Udalo sie! - partia zlecen wykonana\n";
+			
+			if(!Constants::GENERATE_ZLECENIA_INF)
+				end = true;
         }
     }
     else
