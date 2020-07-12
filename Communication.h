@@ -53,7 +53,7 @@ namespace COM
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
 		
-		if(Messages::getName(type) == "REQUEST") {
+		if(Messages::getName(type) == "REQUEST" || Messages::getName(type) == "RELEASE") {
 			ResourceType resourceType = ((Request *)message)->type;
 			string typeString = "";
 			switch (resourceType)
@@ -61,26 +61,46 @@ namespace COM
 				case 100:
 				{
 					typeString = "zlecenie";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl;
+							
 					break;
 				}
 				case 200:
 				{
 					typeString = "agrafka";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl;
+							
 					break;
 				}
 				case 300:
 				{
 					typeString = "trucizna";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << " (units: " << ((Request *)message)->units << ")" << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << " (units: " << ((Request *)message)->units << ")" << endl;
+							
 					break;
 				}
 			}
-			if (logEnabled)
-			{
-				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-					 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << "(units: " << ((Request *)message)->units << ")" << endl;
-			}
-			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-					<< "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << "(units: " << ((Request *)message)->units << ")" << endl;
 			
 		}
 		else 
