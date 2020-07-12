@@ -82,28 +82,6 @@ public:
         this->units = units;
         this->type = type;
         this->timestamp = Lamport::getTimestamp();
-
-        string typeString = "";
-        switch (type)
-        {
-        case 100:
-        {
-            typeString = "zlecenie";
-            break;
-        }
-        case 200:
-        {
-            typeString = "agrafka";
-            break;
-        }
-        case 300:
-        {
-            typeString = "trucizna";
-            break;
-        }
-        }
-
-        //cout <<"REQUEST " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n";
     }
 
     string toString()
@@ -119,8 +97,6 @@ public:
     {
         this->source = MpiConfig::rank;
         this->timestamp = Lamport::getTimestamp();
-
-        //cout <<"REPLY " << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n";
     }
 
     void print()
@@ -144,8 +120,6 @@ public:
     {
         this->source = MpiConfig::rank;
         this->timestamp = Lamport::getTimestamp();
-		
-		//cout <<"COMPLETED " << ": id(" << this->source << ") timestamp(" << this->timestamp << ")\n";
     }
 
     void print()
@@ -176,28 +150,6 @@ public:
         this->units = units;
         this->timestamp = Lamport::getTimestamp();
         this->type = type;
-
-        string typeString = "";
-        switch (type)
-        {
-        case 100:
-        {
-            typeString = "zlecenie";
-            break;
-        }
-        case 200:
-        {
-            typeString = "agrafka";
-            break;
-        }
-        case 300:
-        {
-            typeString = "trucizna";
-            break;
-        }
-        }
-
-        //cout <<"RELEASE " << typeString << ": id(" << this->source << ") timestamp(" << this->timestamp << ") units(" << this->units << ")\n";
     }
 
     string toString()

@@ -8,6 +8,7 @@
 namespace COM
 {
     bool logEnabled = true;
+	bool logExtendedEnabled = true;
     Mutex logMutex;
     ofstream logFile("log" + std::to_string(MpiConfig::rank), std::ofstream::out | std::ofstream::trunc);
 
@@ -20,11 +21,20 @@ namespace COM
             logFile.close();
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
-        if (logEnabled)
+		
+        if (logEnabled && logExtendedEnabled)
         {
-            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+			if(type == MESSAGE_TYPES_COUNT)
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
+			else
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
         }
-        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+		
+		if(type == MESSAGE_TYPES_COUNT)
+			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
+		else 
+			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+		
         logFile.close();
         logMutex.unlock();
     }
@@ -38,41 +48,39 @@ namespace COM
             logFile.close();
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
+		
+		if(Messages::getName(type) == "REQUEST") {
+			ResourceType resourceType = ((Request *)message)->type;
+			string typeString = "";
+			switch (resourceType)
+			{
+				case 100:
+				{
+					typeString = "zlecenie";
+					break;
+				}
+				case 200:
+				{
+					typeString = "agrafka";
+					break;
+				}
+				case 300:
+				{
+					typeString = "trucizna";
+					break;
+				}
+			}
+		}
 
         if (logEnabled)
         {
-			if(Messages::getName(type) == "REQUEST") {
-				ResourceType resourceType = ((Request *)message)->type;
-				string typeString = "";
-				switch (resourceType)
-				{
-					case 100:
-					{
-						typeString = "zlecenie";
-						break;
-					}
-					case 200:
-					{
-						typeString = "agrafka";
-						break;
-					}
-					case 300:
-					{
-						typeString = "trucizna";
-						break;
-					}
-				}
-				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+			cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                  << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl; //alert
-			}
-			
-			/*
-            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
-				 */
         }
+		
         logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << ((Message *)message)->toString() << endl; //alert
+                << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << endl; //alert
+				
         logFile.close();
         logMutex.unlock();
     }
