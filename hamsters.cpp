@@ -4,7 +4,7 @@
 #include "MpiConfig.h"
 #include "Communication.h"
 #include "Constants.h"
-#include "Zlecenie.h"
+#include "Messages.h"
 #include "unistd.h"
 
 int main(int argc, char **argv)

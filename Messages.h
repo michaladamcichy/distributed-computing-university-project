@@ -3,8 +3,8 @@
 #include "stdafx.h"
 #include "enums.h"
 #include "MpiConfig.h"
-#include "Zlecenie.h"
 #include "Lamport.h"
+#include "Constants.h"
 
 class Message
 {
@@ -32,6 +32,40 @@ public:
         }
         return false;
     }
+};
+
+class Zlecenie : public Message
+{
+public:
+    int count;
+
+public:
+    Zlecenie() {}
+    Zlecenie(int count)
+    {
+
+        this->count = count;
+        this->source = MpiConfig::rank;
+        this->timestamp = Lamport::getTimestamp();
+    }
+
+    static Zlecenie random()
+    {
+        return Zlecenie(rand() % Constants::MAX_HAMSTERS_IN_ZLECENIE_COUNT + 1);
+    }
+
+    static Zlecenie *randomVector()
+    {
+        Zlecenie *zlecenia = new Zlecenie[Constants::MAX_ZLECENIA_COUNT];
+        for (int i = 0; i < Constants::MAX_ZLECENIA_COUNT; i++)
+        {
+            zlecenia[i] = Zlecenie::random();
+        }
+
+        return zlecenia;
+    }
+
+private:
 };
 
 class Request : public Message
