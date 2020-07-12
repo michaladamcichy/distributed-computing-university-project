@@ -3,4 +3,4 @@ pkill $filename
 rm hamsters
 rm log*
 mpic++ -std=c++11 $filename.cpp -o $filename -lpthread
-mpirun -np 21 $filename
+mpirun -np 11 --mca  btl_tcp_if_include br0 -hostfile hostfile $filename
