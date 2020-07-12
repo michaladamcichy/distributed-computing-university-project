@@ -11,6 +11,8 @@ private:
     vector<T> *messages;
     Mutex *messagesMutex;
 
+    Mutex changeMutex;
+
     MessageHandler<Request> *otherMessageHandler = NULL;
 
     bool changedFlag = false;
@@ -43,12 +45,29 @@ public:
         pthread_create(&t, NULL, MessageHandler::threadFunction, (void *)this);
     }
 
+    // void setAsChanged()
+    // {
+    //     changedFlag = true;
+    // }
+    bool setNoChange()
+    {
+        messagesMutex->lock();
+        changedFlag = false;
+        messagesMutex->unlock();
+    }
+
     bool changed()
     {
-        bool answer = changedFlag;
-        if (changedFlag)
-            changedFlag = false;
-        return answer;
+        // messagesMutex->lock();
+        // COM::log("messagesMutex->lock()");
+        // bool answer = changedFlag;
+        // if (changedFlag)
+        //     changedFlag = false;
+        // messagesMutex->unlock();
+        // COM::log("messagesMutex.unlock()");
+
+        // return answer;
+        return changedFlag;
     }
 
     void remove(int sender)
@@ -64,6 +83,7 @@ public:
             }
         }
         changedFlag = true;
+
         messagesMutex->unlock();
     }
 
@@ -84,11 +104,12 @@ private:
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
             ////cout <<&buffer << endl;
+            that->messagesMutex->lock();
             that->changedFlag = true;
+
             int sender = (*((Message *)&buffer)).source;
             COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
 
-            that->messagesMutex->lock(); //alert
             that->messages->push_back(buffer);
             that->messagesMutex->unlock();
 

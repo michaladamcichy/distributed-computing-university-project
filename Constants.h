@@ -3,7 +3,7 @@
 
 namespace Constants
 {
-    const int MAX_ZLECENIA_COUNT = 5;
+    const int MAX_ZLECENIA_COUNT = 20;
     const int MAX_AGRAFKI_COUNT = 2;
     const int MAX_TRUCIZNY_COUNT = 5;
 

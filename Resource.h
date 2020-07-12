@@ -85,7 +85,7 @@ public:
             }
             else
             {
-                COM::log("Retrying\n");
+                COM::log("Not enoough. Retrying\n");
                 COM::log("");
                 requestsMutex.unlock();
                 COM::log("requestsMutex.unlock()");
@@ -93,9 +93,11 @@ public:
                 COM::log("waiting for change");
                 while (!requestsHandler.changed())
                 {
+                    // sleep(0.001);
                     //COM::log("Noting has changed");
-                    // cout << "PROCESS " << MpiConfig::rank << endl;
+                    //cout << "PROCESS " << MpiConfig::rank << endl;
                 }
+                requestsHandler.setNoChange();
                 COM::log("requests change detected");
                 //cout <<"Available resource " << type << ": " << maxResourceAmount - sum << " <-- retrying (need " << units << ")\n";
 
