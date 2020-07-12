@@ -49,9 +49,9 @@ namespace COM
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
 		
+		string typeString = "";
 		if(Messages::getName(type) == "REQUEST") {
 			ResourceType resourceType = ((Request *)message)->type;
-			string typeString = "";
 			switch (resourceType)
 			{
 				case 100:
