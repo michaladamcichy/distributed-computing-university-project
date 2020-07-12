@@ -70,7 +70,7 @@ public:
                 sum += requests[i].units;
                 i++;
             }
-            COM::log(">>> In a moment I will know if there's enough for me");
+            //COM::log(">>> In a moment I will know if there's enough for me");
 
             if (units <= (maxResourceAmount - sum))
             {
@@ -84,7 +84,6 @@ public:
             else
             {
                 COM::log(">>> Not enoough. Retrying\n");
-                COM::log("");
                 requestsMutex.unlock();
                 //COM::log("requestsMutex.unlock()");
 
@@ -102,7 +101,7 @@ public:
                 //COM::log("sorted! :)");
             }
         }
-        //COM::log(">>> exited acquiring loop");
+        COM::log(">>> exited acquiring loop");
 
         requestsMutex.unlock();
         //COM::log("requestsMutex.unlock()");

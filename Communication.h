@@ -8,13 +8,13 @@
 namespace COM
 {
     bool logEnabled = true;
-	bool logExtendedEnabled = true;
+	bool logExtendedEnabled = false;
     Mutex logMutex;
     ofstream logFile("log" + std::to_string(MpiConfig::rank), std::ofstream::out | std::ofstream::trunc);
 
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
-		if(logExtendedEnabled) 
+		if(logExtendedEnabled || message == "### All tasks completed! ###") 
 		{
 			logMutex.lock();
 			int timestamp = Lamport::readTimestamp();
@@ -129,16 +129,78 @@ namespace COM
             logFile.close();
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
-
-        if (logEnabled)
-        {			
-            cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
-                 << "timestamp: " << ((Message *)message)->timestamp << endl;
-        }
-        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
-                << "timestamp: " << ((Message *)message)->timestamp << endl;
+		
+		if(Messages::getName(type) == "REQUEST" || Messages::getName(type) == "RELEASE") {
+			ResourceType resourceType = ((Request *)message)->type;
+			string typeString = "";
+			switch (resourceType)
+			{
+				case 100:
+				{
+					typeString = "zlecenie";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " "
+							 << "timestamp: " << ((Message *)message)->timestamp << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " "
+							<< "timestamp: " << ((Message *)message)->timestamp << endl;
+							
+					break;
+				}
+				case 200:
+				{
+					typeString = "agrafka";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " "
+							 << "timestamp: " << ((Message *)message)->timestamp << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " "
+							<< "timestamp: " << ((Message *)message)->timestamp << endl;
+							
+							
+					break;
+				}
+				case 300:
+				{
+					typeString = "trucizna";
+					
+					if (logEnabled)
+					{
+						cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " (units: " << ((Request *)message)->units << ") "
+							 << "timestamp: " << ((Message *)message)->timestamp << endl;
+					}
+					logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+							<< "<--- PROCESS " << source << ": " << Messages::getName(type) << " " << typeString << " (units: " << ((Request *)message)->units << ") "
+							<< "timestamp: " << ((Message *)message)->timestamp << endl;
+							
+					break;
+				}
+			}
+			
+		}
+		else 
+		{
+			if (logEnabled)
+			{			
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
+					 << "timestamp: " << ((Message *)message)->timestamp << endl;
+			}
+			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					<< "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
+					<< "timestamp: " << ((Message *)message)->timestamp << endl;
+		}
+		
+        
         logFile.close();
         logMutex.unlock();
     }
