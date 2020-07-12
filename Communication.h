@@ -13,8 +13,9 @@ namespace COM
 
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
-        int timestamp = Lamport::readTimestamp();
         logMutex.lock();
+        int timestamp = Lamport::readTimestamp();
+
         if (logFile.is_open())
             logFile.close();
 
@@ -30,8 +31,9 @@ namespace COM
 
     void logSend(int target, const void *message, MessageType type)
     {
-        int timestamp = Lamport::readTimestamp();
         logMutex.lock();
+        int timestamp = Lamport::readTimestamp();
+
         if (logFile.is_open())
             logFile.close();
 
@@ -50,8 +52,9 @@ namespace COM
 
     void logReceive(int source, const void *message, MessageType type)
     {
-        int timestamp = Lamport::readTimestamp();
         logMutex.lock();
+        int timestamp = Lamport::readTimestamp();
+
         if (logFile.is_open())
             logFile.close();
 
@@ -85,7 +88,7 @@ namespace COM
         }
         else
         {
-            //logSend(target, message, (MessageType)type);
+            logSend(target, message, (MessageType)type);
         }
     }
 
@@ -134,9 +137,7 @@ namespace COM
             //int sender = *(((int *)data));
             // if (timestamp > 1000)
             // {
-            cout
-                << timestamp << endl;
-            cout << sender << endl;
+            //
 
             Lamport::update(timestamp); //wydobywam timestamp z wiadomosci
             logReceive(sender, data, (MessageType)type);

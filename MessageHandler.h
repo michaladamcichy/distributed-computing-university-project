@@ -85,7 +85,7 @@ private:
                 MPI_STATUS_IGNORE);
             ////cout <<&buffer << endl;
             that->changedFlag = true;
-            int sender = (*((int *)&buffer));
+            int sender = (*((Message *)&buffer)).source;
             COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
 
             that->messagesMutex->lock(); //alert
@@ -101,7 +101,7 @@ private:
             {
                 if (that->otherMessageHandler == 0)
                 {
-                    //cout <<"cos tu jest ostro nie halo\n";
+                    cout << "cos tu jest ostro nie halo\n";
                 }
                 else
                 {

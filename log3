@@ -1,50 +1,118 @@
-T1|P3 : <--- PROCESS 3: INIT timestamp: 1 
-T4|P3 : acquiring
+T1|P3 : <--- PROCESS 1: INIT timestamp: 1 
+T1|P3 : <--- PROCESS 1: REQUEST timestamp: 5 
+T5|P3 : -> PROCESS 1: REPLY 
+T5|P3 : acquiring 1
  UNDEFINED
-T4|P3 : <--- PROCESS 2: REQUEST timestamp: 5 
-T5|P3 : <--- PROCESS 2: REPLY timestamp: 6 
-T6|P3 : <--- PROCESS 1: REQUEST timestamp: 2 
-T7|P3 : <--- PROCESS 4: REQUEST timestamp: 6 
-T8|P3 : <--- PROCESS 5: REQUEST timestamp: 3 
-T9|P3 : <--- PROCESS 1: REPLY timestamp: 7 
-T9|P3 : <--- PROCESS 4: REPLY timestamp: 8 
+T6|P3 : -> PROCESS 1: REQUEST 
+T6|P3 : -> PROCESS 2: REQUEST 
+T6|P3 : <--- PROCESS 2: REQUEST timestamp: 6 
+T7|P3 : -> PROCESS 4: REQUEST 
+T7|P3 : -> PROCESS 5: REQUEST 
+T7|P3 : <--- PROCESS 2: REPLY timestamp: 7 
+T7|P3 : <--- PROCESS 1: REPLY timestamp: 8 
+T7|P3 : <--- PROCESS 4: REPLY timestamp: 8 
+T7|P3 : -> PROCESS 2: REPLY 
+T7|P3 : <--- PROCESS 5: REQUEST timestamp: 6 
+T8|P3 : -> PROCESS 5: REPLY 
+T8|P3 : <--- PROCESS 4: REQUEST timestamp: 6 
+T9|P3 : -> PROCESS 4: REPLY 
 T9|P3 : <--- PROCESS 5: REPLY timestamp: 8 
 T9|P3 : got replies
  UNDEFINED
+T9|P3 : requestsMutex.lock() UNDEFINED
+T9|P3 : acquiring loop iteration ... UNDEFINED
+T9|P3 : In a moment I will know if there's enough for me UNDEFINED
 T9|P3 : acquired resource UNDEFINED
-T9|P3 : acquiring
+T9|P3 : exited acquiring loop UNDEFINED
+T9|P3 : requestsMutex.unlock() UNDEFINED
+T9|P3 : acquiring 1
  UNDEFINED
-T9|P3 : <--- PROCESS 2: REQUEST timestamp: 8 
+T10|P3 : -> PROCESS 1: REQUEST 
+T10|P3 : -> PROCESS 2: REQUEST 
+T10|P3 : -> PROCESS 4: REQUEST 
+T10|P3 : -> PROCESS 5: REQUEST 
+T10|P3 : <--- PROCESS 2: REQUEST timestamp: 10 
+T11|P3 : -> PROCESS 2: REPLY 
 T11|P3 : <--- PROCESS 1: REQUEST timestamp: 10 
+T12|P3 : -> PROCESS 1: REPLY 
 T12|P3 : <--- PROCESS 4: REQUEST timestamp: 10 
-T13|P3 : <--- PROCESS 5: REQUEST timestamp: 10 
-T12|P3 : <--- PROCESS 2: REQUEST timestamp: 10 
-T10|P3 : <--- PROCESS 5: REPLY timestamp: 14 
-T15|P3 : <--- PROCESS 1: REPLY timestamp: 14 
-T15|P3 : <--- PROCESS 4: REPLY timestamp: 13 
-T15|P3 : <--- PROCESS 2: REPLY timestamp: 15 
-T15|P3 : got replies
+T13|P3 : -> PROCESS 4: REPLY 
+T13|P3 : <--- PROCESS 5: REQUEST timestamp: 11 
+T14|P3 : -> PROCESS 5: REPLY 
+T14|P3 : <--- PROCESS 2: REPLY timestamp: 13 
+T14|P3 : <--- PROCESS 1: REPLY timestamp: 13 
+T14|P3 : <--- PROCESS 4: REPLY timestamp: 12 
+T14|P3 : <--- PROCESS 2: REQUEST timestamp: 15 
+T15|P3 : -> PROCESS 2: REPLY 
+T15|P3 : <--- PROCESS 5: REQUEST timestamp: 12 
+T16|P3 : -> PROCESS 5: REPLY 
+T16|P3 : <--- PROCESS 5: REPLY timestamp: 14 
+T16|P3 : got replies
  UNDEFINED
-T15|P3 : <--- PROCESS 2: RELEASE timestamp: 16 
-T15|P3 : <--- PROCESS 2: RELEASE timestamp: 17 
-T15|P3 : acquired resource UNDEFINED
-T15|P3 : agrafka acquired UNDEFINED
-T15|P3 : acquiring
+T16|P3 : requestsMutex.lock() UNDEFINED
+T16|P3 : acquiring loop iteration ... UNDEFINED
+T16|P3 : In a moment I will know if there's enough for me UNDEFINED
+T16|P3 : Retrying
  UNDEFINED
-T15|P3 : <--- PROCESS 1: REQUEST timestamp: 16 
-T17|P3 : <--- PROCESS 4: REPLY timestamp: 17 
-T17|P3 : <--- PROCESS 5: REPLY timestamp: 17 
-T17|P3 : <--- PROCESS 1: REPLY timestamp: 17 
-T17|P3 : <--- PROCESS 2: REPLY timestamp: 20 
-T17|P3 : got replies
+T16|P3 :  UNDEFINED
+T16|P3 : requestsMutex.unlock() UNDEFINED
+T16|P3 : waiting for change UNDEFINED
+T16|P3 : <--- PROCESS 5: RELEASE timestamp: 17 
+T16|P3 : <--- PROCESS 1: REQUEST timestamp: 17 
+T17|P3 : -> PROCESS 1: REPLY 
+T17|P3 : <--- PROCESS 5: RELEASE timestamp: 18 
+T17|P3 : requests change detected UNDEFINED
+T17|P3 : requestsMutex.lock() UNDEFINED
+T17|P3 : sorted! :) UNDEFINED
+T17|P3 : acquiring loop iteration ... UNDEFINED
+T17|P3 : In a moment I will know if there's enough for me UNDEFINED
+T17|P3 : Retrying
  UNDEFINED
-T17|P3 : <--- PROCESS 1: RELEASE timestamp: 18 
-T17|P3 : <--- PROCESS 1: RELEASE timestamp: 19 
-T17|P3 : <--- PROCESS 4: REQUEST timestamp: 18 
+T17|P3 :  UNDEFINED
+T17|P3 : requestsMutex.unlock() UNDEFINED
+T17|P3 : waiting for change UNDEFINED
+T17|P3 : <--- PROCESS 2: RELEASE timestamp: 18 
+T17|P3 : requests change detected UNDEFINED
+T17|P3 : requestsMutex.lock() UNDEFINED
+T17|P3 : sorted! :) UNDEFINED
+T17|P3 : acquiring loop iteration ... UNDEFINED
+T17|P3 : In a moment I will know if there's enough for me UNDEFINED
 T17|P3 : acquired resource UNDEFINED
-T19|P3 : Zlecenie completed UNDEFINED
-T21|P3 : <--- PROCESS 4: RELEASE timestamp: 19 
-T21|P3 : <--- PROCESS 4: RELEASE timestamp: 20 
-T21|P3 : <--- PROCESS 5: REQUEST timestamp: 19 
-T22|P3 : <--- PROCESS 5: RELEASE timestamp: 20 
-T22|P3 : <--- PROCESS 5: RELEASE timestamp: 21 
+T17|P3 : exited acquiring loop UNDEFINED
+T17|P3 : requestsMutex.unlock() UNDEFINED
+T17|P3 : agrafka acquired UNDEFINED
+T17|P3 : acquiring 4
+ UNDEFINED
+T18|P3 : <--- PROCESS 2: RELEASE timestamp: 17 
+T18|P3 : -> PROCESS 1: REQUEST 
+T18|P3 : -> PROCESS 2: REQUEST 
+T18|P3 : -> PROCESS 4: REQUEST 
+T18|P3 : -> PROCESS 5: REQUEST 
+T18|P3 : <--- PROCESS 2: REPLY timestamp: 21 
+T18|P3 : <--- PROCESS 4: REPLY timestamp: 18 
+T18|P3 : <--- PROCESS 1: RELEASE timestamp: 19 
+T18|P3 : <--- PROCESS 1: RELEASE timestamp: 18 
+T18|P3 : <--- PROCESS 5: REPLY timestamp: 21 
+T18|P3 : <--- PROCESS 1: REPLY timestamp: 20 
+T18|P3 : got replies
+ UNDEFINED
+T18|P3 : requestsMutex.lock() UNDEFINED
+T18|P3 : acquiring loop iteration ... UNDEFINED
+T18|P3 : In a moment I will know if there's enough for me UNDEFINED
+T18|P3 : acquired resource UNDEFINED
+T18|P3 : exited acquiring loop UNDEFINED
+T18|P3 : requestsMutex.unlock() UNDEFINED
+T19|P3 : -> PROCESS 1: RELEASE 
+T19|P3 : -> PROCESS 2: RELEASE 
+T19|P3 : -> PROCESS 4: RELEASE 
+T19|P3 : -> PROCESS 5: RELEASE 
+T20|P3 : -> PROCESS 1: RELEASE 
+T20|P3 : -> PROCESS 2: RELEASE 
+T20|P3 : -> PROCESS 4: RELEASE 
+T20|P3 : -> PROCESS 5: RELEASE 
+T20|P3 : Zlecenie completed UNDEFINED
+T21|P3 : -> PROCESS 0: COMPLETED 
+T21|P3 : <--- PROCESS 4: REQUEST timestamp: 19 
+T22|P3 : -> PROCESS 4: REPLY 
+T22|P3 : <--- PROCESS 4: RELEASE timestamp: 20 
+T22|P3 : <--- PROCESS 4: RELEASE timestamp: 21 
