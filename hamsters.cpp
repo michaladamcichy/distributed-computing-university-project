@@ -34,8 +34,7 @@ int main(int argc, char **argv)
             }
             COM::log("### All tasks completed! ###");
 			
-			if(!Constants::GENERATE_ZLECENIA_INF)
-				end = true;
+			end = true;
         }
     }
     else

@@ -9,6 +9,4 @@ namespace Constants
 
     const int MAX_HAMSTERS_IN_ZLECENIE_COUNT = 5;
 	
-	const bool GENERATE_ZLECENIA_INF = true;
-	
 } // namespace Constants
