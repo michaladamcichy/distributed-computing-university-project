@@ -41,7 +41,7 @@ namespace COM
 
         if (logEnabled)
         {
-			if(Messages::getName(type) == MESSAGE_REQUEST) {
+			if(Messages::getName(type) == "REQUEST") {
 				ResourceType resourceType = ((Request *)message)->type;
 				string typeString = "";
 				switch (resourceType)
