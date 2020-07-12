@@ -11,7 +11,7 @@ public:
     {
         if (pthread_mutex_init(&mutex, NULL) != 0)
         {
-            cout << "Failed to create mutex\n";
+            //cout <<"Failed to create mutex\n";
         }
     }
 

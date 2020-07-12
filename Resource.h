@@ -40,7 +40,7 @@ public:
 
     int acquire(int units)
     {
-        COM::log("acquiring\n");
+        COM::log("acquiring " + to_string(units) + "\n");
         Request request(units, type);
         COM::sendToAll(&request, type + MESSAGE_REQUEST);
 
@@ -52,6 +52,7 @@ public:
         int returnValue = -1;
 
         requestsMutex.lock();
+        COM::log("requestsMutex.lock()");
         requests.push_back(request);
         sort(requests.begin(), requests.end());
         requestsHandler.changed();
@@ -62,6 +63,7 @@ public:
 
         while (!acquired)
         {
+            COM::log("acquiring loop iteration ...");
             int sum = 0;
             int i = 0;
             while ((requests[i].source != MpiConfig::rank))
@@ -69,6 +71,7 @@ public:
                 sum += requests[i].units;
                 i++;
             }
+            COM::log("In a moment I will know if there's enough for me");
 
             if (units <= (maxResourceAmount - sum))
             {
@@ -78,22 +81,34 @@ public:
                 {
                     returnValue = i;
                 }
+                //cout <<"Available resource " << type << ": " << maxResourceAmount - sum << " <-- taking " << units << "\n";
             }
             else
             {
+                COM::log("Retrying\n");
+                COM::log("");
                 requestsMutex.unlock();
+                COM::log("requestsMutex.unlock()");
 
+                COM::log("waiting for change");
                 while (!requestsHandler.changed())
                 {
+                    //COM::log("Noting has changed");
+                    // cout << "PROCESS " << MpiConfig::rank << endl;
                 }
-                cout << "Retrying \n";
+                COM::log("requests change detected");
+                //cout <<"Available resource " << type << ": " << maxResourceAmount - sum << " <-- retrying (need " << units << ")\n";
 
                 requestsMutex.lock();
+                COM::log("requestsMutex.lock()");
                 sort(requests.begin(), requests.end());
+                COM::log("sorted! :)");
             }
         }
+        COM::log("exited acquiring loop");
 
         requestsMutex.unlock();
+        COM::log("requestsMutex.unlock()");
 
         replies.clear();
 
@@ -104,5 +119,6 @@ public:
     {
         Release release(units, type);
         COM::sendToAll(&release, type + MESSAGE_RELEASE);
+        requestsHandler.remove(MpiConfig::rank);
     }
 };

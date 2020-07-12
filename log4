@@ -1,0 +1,118 @@
+T1|P4 : <--- PROCESS 1: INIT timestamp: 1 
+T2|P4 : <--- PROCESS 1: REQUEST timestamp: 5 
+T5|P4 : -> PROCESS 1: REPLY 
+T5|P4 : acquiring 1
+ UNDEFINED
+T6|P4 : <--- PROCESS 2: REQUEST timestamp: 6 
+T7|P4 : -> PROCESS 1: REQUEST 
+T7|P4 : -> PROCESS 2: REQUEST 
+T7|P4 : -> PROCESS 3: REQUEST 
+T7|P4 : -> PROCESS 2: REPLY 
+T7|P4 : <--- PROCESS 3: REQUEST timestamp: 6 
+T8|P4 : -> PROCESS 5: REQUEST 
+T8|P4 : -> PROCESS 3: REPLY 
+T8|P4 : <--- PROCESS 5: REQUEST timestamp: 6 
+T9|P4 : -> PROCESS 5: REPLY 
+T9|P4 : <--- PROCESS 1: REPLY timestamp: 9 
+T9|P4 : <--- PROCESS 5: REPLY timestamp: 9 
+T9|P4 : <--- PROCESS 2: REPLY timestamp: 9 
+T9|P4 : <--- PROCESS 3: REPLY timestamp: 9 
+T9|P4 : got replies
+ UNDEFINED
+T9|P4 : requestsMutex.lock() UNDEFINED
+T9|P4 : acquiring loop iteration ... UNDEFINED
+T9|P4 : In a moment I will know if there's enough for me UNDEFINED
+T9|P4 : acquired resource UNDEFINED
+T9|P4 : exited acquiring loop UNDEFINED
+T9|P4 : requestsMutex.unlock() UNDEFINED
+T9|P4 : acquiring 1
+ UNDEFINED
+T10|P4 : -> PROCESS 1: REQUEST 
+T10|P4 : -> PROCESS 2: REQUEST 
+T10|P4 : -> PROCESS 3: REQUEST 
+T10|P4 : -> PROCESS 5: REQUEST 
+T10|P4 : <--- PROCESS 1: REPLY timestamp: 12 
+T10|P4 : <--- PROCESS 2: REPLY timestamp: 12 
+T10|P4 : <--- PROCESS 2: REQUEST timestamp: 10 
+T11|P4 : -> PROCESS 2: REPLY 
+T11|P4 : <--- PROCESS 3: REQUEST timestamp: 10 
+T12|P4 : -> PROCESS 3: REPLY 
+T12|P4 : <--- PROCESS 5: REQUEST timestamp: 11 
+T13|P4 : <--- PROCESS 3: REPLY timestamp: 13 
+T13|P4 : -> PROCESS 5: REPLY 
+T13|P4 : <--- PROCESS 1: REQUEST timestamp: 10 
+T14|P4 : -> PROCESS 1: REPLY 
+T14|P4 : <--- PROCESS 2: REQUEST timestamp: 15 
+T15|P4 : -> PROCESS 2: REPLY 
+T15|P4 : <--- PROCESS 5: REQUEST timestamp: 12 
+T16|P4 : -> PROCESS 5: REPLY 
+T16|P4 : <--- PROCESS 5: REPLY timestamp: 15 
+T16|P4 : got replies
+ UNDEFINED
+T16|P4 : requestsMutex.lock() UNDEFINED
+T16|P4 : acquiring loop iteration ... UNDEFINED
+T16|P4 : In a moment I will know if there's enough for me UNDEFINED
+T16|P4 : Retrying
+ UNDEFINED
+T16|P4 :  UNDEFINED
+T16|P4 : requestsMutex.unlock() UNDEFINED
+T16|P4 : waiting for change UNDEFINED
+T16|P4 : <--- PROCESS 5: RELEASE timestamp: 17 
+T16|P4 : <--- PROCESS 5: RELEASE timestamp: 18 
+T16|P4 : requests change detected UNDEFINED
+T16|P4 : requestsMutex.lock() UNDEFINED
+T16|P4 : <--- PROCESS 1: REQUEST timestamp: 17 
+T17|P4 : -> PROCESS 1: REPLY 
+T17|P4 : sorted! :) UNDEFINED
+T17|P4 : acquiring loop iteration ... UNDEFINED
+T17|P4 : In a moment I will know if there's enough for me UNDEFINED
+T17|P4 : Retrying
+ UNDEFINED
+T17|P4 :  UNDEFINED
+T17|P4 : requestsMutex.unlock() UNDEFINED
+T17|P4 : waiting for change UNDEFINED
+T17|P4 : <--- PROCESS 2: RELEASE timestamp: 18 
+T17|P4 : <--- PROCESS 2: RELEASE timestamp: 17 
+T17|P4 : <--- PROCESS 1: RELEASE timestamp: 18 
+T17|P4 : <--- PROCESS 3: REQUEST timestamp: 18 
+T18|P4 : -> PROCESS 3: REPLY 
+T18|P4 : <--- PROCESS 1: RELEASE timestamp: 19 
+T18|P4 : requests change detected UNDEFINED
+T18|P4 : requestsMutex.lock() UNDEFINED
+T18|P4 : sorted! :) UNDEFINED
+T18|P4 : acquiring loop iteration ... UNDEFINED
+T18|P4 : In a moment I will know if there's enough for me UNDEFINED
+T18|P4 : acquired resource UNDEFINED
+T18|P4 : exited acquiring loop UNDEFINED
+T18|P4 : requestsMutex.unlock() UNDEFINED
+T18|P4 : agrafka acquired UNDEFINED
+T18|P4 : acquiring 3
+ UNDEFINED
+T19|P4 : -> PROCESS 1: REQUEST 
+T19|P4 : -> PROCESS 2: REQUEST 
+T19|P4 : -> PROCESS 3: REQUEST 
+T19|P4 : -> PROCESS 5: REQUEST 
+T19|P4 : <--- PROCESS 3: RELEASE timestamp: 19 
+T19|P4 : <--- PROCESS 1: REPLY timestamp: 22 
+T19|P4 : <--- PROCESS 2: REPLY timestamp: 22 
+T19|P4 : <--- PROCESS 5: REPLY timestamp: 22 
+T19|P4 : got replies
+ UNDEFINED
+T19|P4 : requestsMutex.lock() UNDEFINED
+T19|P4 : acquiring loop iteration ... UNDEFINED
+T19|P4 : In a moment I will know if there's enough for me UNDEFINED
+T19|P4 : acquired resource UNDEFINED
+T19|P4 : exited acquiring loop UNDEFINED
+T19|P4 : requestsMutex.unlock() UNDEFINED
+T20|P4 : -> PROCESS 1: RELEASE 
+T20|P4 : -> PROCESS 2: RELEASE 
+T20|P4 : -> PROCESS 3: RELEASE 
+T20|P4 : -> PROCESS 5: RELEASE 
+T21|P4 : -> PROCESS 1: RELEASE 
+T21|P4 : -> PROCESS 2: RELEASE 
+T21|P4 : -> PROCESS 3: RELEASE 
+T21|P4 : -> PROCESS 5: RELEASE 
+T21|P4 : Zlecenie completed UNDEFINED
+T22|P4 : -> PROCESS 0: COMPLETED 
+T22|P4 : <--- PROCESS 3: REPLY timestamp: 22 
+T22|P4 : <--- PROCESS 3: RELEASE timestamp: 20 

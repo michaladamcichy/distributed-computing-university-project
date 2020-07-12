@@ -1,5 +1,6 @@
 filename="hamsters"
 pkill $filename
 rm hamsters
+rm log*
 mpic++ -std=c++11 $filename.cpp -o $filename -lpthread
 mpirun -np 6 $filename
