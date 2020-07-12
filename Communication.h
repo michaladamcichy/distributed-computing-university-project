@@ -14,29 +14,33 @@ namespace COM
 
     void log(string message, MessageType type = MESSAGE_TYPES_COUNT)
     {
-        logMutex.lock();
-        int timestamp = Lamport::readTimestamp();
+		if(logExtendedEnabled) 
+		{
+			logMutex.lock();
+			int timestamp = Lamport::readTimestamp();
 
-        if (logFile.is_open())
-            logFile.close();
+			if (logFile.is_open())
+				logFile.close();
 
-        logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
-		
-        if (logEnabled && logExtendedEnabled)
-        {
+			logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
+			
+			
+			if (logEnabled)
+			{
+				if(type == MESSAGE_TYPES_COUNT)
+					cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
+				else
+					cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+			}
+			
 			if(type == MESSAGE_TYPES_COUNT)
-				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
-			else
-				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
-        }
-		
-		if(type == MESSAGE_TYPES_COUNT)
-			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
-		else 
-			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
-		
-        logFile.close();
-        logMutex.unlock();
+				logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;
+			else 
+				logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
+			
+			logFile.close();
+			logMutex.unlock();
+		}
     }
 
     void logSend(int target, const void *message, MessageType type)
@@ -49,9 +53,9 @@ namespace COM
 
         logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
 		
-		string typeString = "";
 		if(Messages::getName(type) == "REQUEST") {
 			ResourceType resourceType = ((Request *)message)->type;
+			string typeString = "";
 			switch (resourceType)
 			{
 				case 100:
@@ -70,16 +74,27 @@ namespace COM
 					break;
 				}
 			}
+			if (logEnabled)
+			{
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << "(units: " << ((Request *)message)->units << ")" << endl;
+			}
+			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					<< "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << "(units: " << ((Request *)message)->units << ")" << endl;
+			
 		}
+		else 
+		{
 
-        if (logEnabled)
-        {
-			cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                 << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << typeString << endl; //alert
-        }
+			if (logEnabled)
+			{
+				cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					 << "-> PROCESS " << target << ": " << Messages::getName(type) << endl;
+			}
 		
-        logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
-                << "-> PROCESS " << target << ": " << Messages::getName(type) << " " << endl; //alert
+			logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
+					<< "-> PROCESS " << target << ": " << Messages::getName(type) << endl;
+		}
 				
         logFile.close();
         logMutex.unlock();
@@ -99,11 +114,11 @@ namespace COM
         {			
             cout << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                  << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
-                 << "timestamp: " << ((Message *)message)->timestamp << " " << ((Message *)message)->toString() << endl; //alert
+                 << "timestamp: " << ((Message *)message)->timestamp << endl;
         }
         logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : "
                 << "<--- PROCESS " << source << ": " << Messages::getName(type) << " "
-                << "timestamp: " << ((Message *)message)->timestamp << " " << ((Message *)message)->toString() << endl; //alert
+                << "timestamp: " << ((Message *)message)->timestamp << endl;
         logFile.close();
         logMutex.unlock();
     }

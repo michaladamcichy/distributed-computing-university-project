@@ -32,8 +32,7 @@ int main(int argc, char **argv)
                 wypelnioneZleceniaCount++;
                 //cout <<"Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
             }
-            COM::log("All tasks completed");
-            cout << "Udalo sie! - partia zlecen wykonana\n";
+            COM::log("### All tasks completed! ###");
 			
 			if(!Constants::GENERATE_ZLECENIA_INF)
 				end = true;
@@ -51,30 +50,24 @@ int main(int argc, char **argv)
             Resource agrafki(RESOURCE_AGRAFKA, Constants::MAX_AGRAFKI_COUNT);
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
-            //zlecenieIndex = zlecenia.acquire(1);
-            //Zlecenie zlecenie = zleceniaMessages[zlecenieIndex];
             Zlecenie zlecenie = zleceniaMessages[zlecenia.acquire(1)];
-            //COM::log("    zlecenie acquired: " + to_string(zlecenie.count) + " hamsters");
+            COM::log(" >>> zlecenie acquired (" + to_string(zlecenie.count) + " hamsters)");
 
             agrafki.acquire(1);
-            COM::log("agrafka acquired");
-            ////cout <<"agrafka acquired\n";
+            COM::log(" >>> agrafka acquired");
 
             trucizny.acquire(zlecenie.count);
-            //COM::log(to_string(zlecenie.count) + " trucizny acquired");
-            ////cout <<to_string(zlecenie.count) + " trucizny acquired" << endl;
+            COM::log(" >>> trucizna acquired (" + to_string(zlecenie.count) + " units)");
 
             trucizny.release(zlecenie.count);
-            ////cout <<to_string(zlecenie.count) + " trucizny released" << endl;
 
             agrafki.release(1);
-            // COM::log("agrafka released");
-            ////cout <<"agrafka released\n";
+            COM::log(" >>> agrafka released");
 
-            COM::log("Zlecenie completed");
+
+            COM::log(" >>> zlecenie completed");
             Completed message;
-            // cout << message.timestamp << endl;
-            // cout << message.source << endl;
+
 
             COM::send(BURMISTRZ_ID, &message, MESSAGE_COMPLETED);
         }

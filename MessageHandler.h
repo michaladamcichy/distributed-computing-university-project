@@ -34,12 +34,6 @@ public:
         this->messagesMutex = messagesMutex;
         this->otherMessageHandler = otherMessageHandler;
 
-        // //cout <<messages << endl;
-        // //cout <<messagesMutex << endl;
-        // //cout <<otherMessageHandler << endl;
-        //this->messagesMutex->lock();
-        //this->messagesMutex->unlock();
-
         pthread_t t;
 
         pthread_create(&t, NULL, MessageHandler::threadFunction, (void *)this);
@@ -103,7 +97,7 @@ private:
                 that->type,
                 MPI_COMM_WORLD,
                 MPI_STATUS_IGNORE);
-            ////cout <<&buffer << endl;
+
             that->messagesMutex->lock();
             that->changedFlag = true;
 
