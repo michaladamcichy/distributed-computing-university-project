@@ -62,7 +62,7 @@ public:
 
         while (!acquired)
         {
-            COM::log(">>> acquiring loop iteration ...");
+            // COM::log(">>> acquiring loop iteration ...");
             int sum = 0;
             int i = 0;
             while ((requests[i].source != MpiConfig::rank))
@@ -74,7 +74,6 @@ public:
 
             if (units <= (maxResourceAmount - sum))
             {
-                COM::log("ACQUIRED " + Messages::resourceToName(type));
                 //COM::log(">>> acquired resource");
                 acquired = true;
                 if (type == RESOURCE_ZLECENIE)
@@ -102,7 +101,7 @@ public:
                 //COM::log("sorted! :)");
             }
         }
-        COM::log(">>> exited acquiring loop");
+        COM::log("ACQUIRED " + Messages::resourceToName(type));
 
         requestsMutex.unlock();
         //COM::log("requestsMutex.unlock()");
