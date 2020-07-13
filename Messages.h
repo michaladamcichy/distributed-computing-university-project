@@ -177,6 +177,18 @@ namespace Messages
         return type;
     }
 
+    string resourceToName(int type)
+    {
+        int resource = Messages::castToResource(type);
+
+        if (resource == RESOURCE_AGRAFKA)
+            return "AGRAFKA";
+        else if (resource == RESOURCE_ZLECENIE)
+            return "ZLECENIE";
+        else if (resource == RESOURCE_TRUCIZNA)
+            return "TRUCIZNA";
+    }
+
     unsigned int
     getSize(int type)
     {

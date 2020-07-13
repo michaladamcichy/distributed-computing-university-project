@@ -51,7 +51,7 @@ public:
         int returnValue = -1;
 
         requestsMutex.lock();
-		//COM::log("requestsMutex.lock()");
+        //COM::log("requestsMutex.lock()");
         requests.push_back(request);
         sort(requests.begin(), requests.end());
         requestsHandler.changed();
@@ -74,6 +74,7 @@ public:
 
             if (units <= (maxResourceAmount - sum))
             {
+                COM::log("ACQUIRED " + Messages::resourceToName(type));
                 //COM::log(">>> acquired resource");
                 acquired = true;
                 if (type == RESOURCE_ZLECENIE)
@@ -113,6 +114,7 @@ public:
 
     void release(int units)
     {
+        COM::log("RELEASED " + Messages::resourceToName(type));
         Release release(units, type);
         COM::sendToAll(&release, type + MESSAGE_RELEASE);
         requestsHandler.remove(MpiConfig::rank);

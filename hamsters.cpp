@@ -33,8 +33,8 @@ int main(int argc, char **argv)
                 //cout <<"Remaining: " << Constants::MAX_ZLECENIA_COUNT - wypelnioneZleceniaCount << endl;
             }
             COM::log("### All tasks completed! ###");
-			
-			end = true;
+
+            end = true;
         }
     }
     else
@@ -53,20 +53,15 @@ int main(int argc, char **argv)
             COM::log(">>> zlecenie acquired (" + to_string(zlecenie.count) + " hamsters)");
 
             agrafki.acquire(1);
-            COM::log(">>> agrafka acquired");
 
             trucizny.acquire(zlecenie.count);
-            COM::log(">>> trucizna acquired (" + to_string(zlecenie.count) + " units)");
 
             trucizny.release(zlecenie.count);
 
             agrafki.release(1);
-            COM::log(">>> agrafka released");
-
 
             COM::log(">>> zlecenie completed");
             Completed message;
-
 
             COM::send(BURMISTRZ_ID, &message, MESSAGE_COMPLETED);
         }
