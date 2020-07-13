@@ -50,7 +50,7 @@ int main(int argc, char **argv)
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
             Zlecenie zlecenie = zleceniaMessages[zlecenia.acquire(1)];
-            COM::log(">>> zlecenie acquired (" + to_string(zlecenie.count) + " hamsters)");
+            //COM::log(">>> zlecenie acquired (" + to_string(zlecenie.count) + " hamsters)");
 
             agrafki.acquire(1);
 
