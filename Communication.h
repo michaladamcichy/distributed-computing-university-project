@@ -8,7 +8,7 @@
 namespace COM
 {
     bool logEnabled = true;
-	bool logExtendedEnabled = false;
+	bool logExtendedEnabled = true;
     Mutex logMutex;
     ofstream logFile("log" + std::to_string(MpiConfig::rank), std::ofstream::out | std::ofstream::trunc);
 
@@ -45,6 +45,7 @@ namespace COM
 
     void logSend(int target, const void *message, MessageType type)
     {
+	    /*
         logMutex.lock();
         int timestamp = Lamport::readTimestamp();
 
@@ -118,10 +119,12 @@ namespace COM
 				
         logFile.close();
         logMutex.unlock();
+	*/
     }
 
     void logReceive(int source, const void *message, MessageType type)
     {
+	    /*
         logMutex.lock();
         int timestamp = Lamport::readTimestamp();
 
@@ -203,6 +206,7 @@ namespace COM
         
         logFile.close();
         logMutex.unlock();
+	*/
     }
 
     void send(int target, void *message, int type, int count = 1)
@@ -220,7 +224,7 @@ namespace COM
         }
         else
         {
-            logSend(target, message, (MessageType)type);
+            //logSend(target, message, (MessageType)type);
         }
     }
 
@@ -272,7 +276,7 @@ namespace COM
             //
 
             Lamport::update(timestamp); //wydobywam timestamp z wiadomosci
-            logReceive(sender, data, (MessageType)type);
+            //logReceive(sender, data, (MessageType)type);
         }
 
         return data;

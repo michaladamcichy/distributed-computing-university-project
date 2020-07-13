@@ -1,0 +1,29 @@
+T12|P1 : >>> got replies
+ 
+T13|P1 : >>> acquiring loop iteration ... 
+T14|P1 : >>> exited acquiring loop 
+T14|P1 : >>> zlecenie acquired (2 hamsters) 
+T16|P1 : >>> got replies
+ 
+T16|P1 : >>> acquiring loop iteration ... 
+T16|P1 : >>> Not enoough. Retrying
+ 
+T16|P1 : >>> acquiring loop iteration ... 
+T16|P1 : >>> Not enoough. Retrying
+ 
+T16|P1 : >>> acquiring loop iteration ... 
+T16|P1 : >>> Not enoough. Retrying
+ 
+T17|P1 : >>> acquiring loop iteration ... 
+T17|P1 : >>> Not enoough. Retrying
+ 
+T18|P1 : >>> acquiring loop iteration ... 
+T18|P1 : >>> exited acquiring loop 
+T18|P1 : >>> agrafka acquired 
+T19|P1 : >>> got replies
+ 
+T19|P1 : >>> acquiring loop iteration ... 
+T19|P1 : >>> exited acquiring loop 
+T19|P1 : >>> trucizna acquired (2 units) 
+T21|P1 : >>> agrafka released 
+T21|P1 : >>> zlecenie completed 

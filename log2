@@ -1,0 +1,17 @@
+T9|P2 : >>> got replies
+ 
+T9|P2 : >>> acquiring loop iteration ... 
+T9|P2 : >>> exited acquiring loop 
+T9|P2 : >>> zlecenie acquired (5 hamsters) 
+T11|P2 : >>> got replies
+ 
+T13|P2 : >>> acquiring loop iteration ... 
+T13|P2 : >>> exited acquiring loop 
+T13|P2 : >>> agrafka acquired 
+T14|P2 : >>> got replies
+ 
+T15|P2 : >>> acquiring loop iteration ... 
+T15|P2 : >>> exited acquiring loop 
+T15|P2 : >>> trucizna acquired (5 units) 
+T17|P2 : >>> agrafka released 
+T17|P2 : >>> zlecenie completed 
