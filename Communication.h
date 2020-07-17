@@ -25,6 +25,7 @@ namespace COM
 			logFile.open("log" + std::to_string(MpiConfig::rank), std::ofstream::app);
 			
 			
+			/*
 			if (logEnabled)
 			{
 				if(type == MESSAGE_TYPES_COUNT)
@@ -32,6 +33,7 @@ namespace COM
 				else
 					cout << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << Messages::getName(type) << endl;
 			}
+			*/
 			
 			if(type == MESSAGE_TYPES_COUNT)
 				logFile << "T" << timestamp << "|P" << MpiConfig::rank << " : " << message << " " << endl;

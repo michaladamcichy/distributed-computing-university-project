@@ -66,8 +66,6 @@ int main(int argc, char **argv)
             COM::send(BURMISTRZ_ID, &message, MESSAGE_COMPLETED);
         }
 
-        //while (true) //alert
-        //    ;
     }
 
     MpiConfig::cleanUp();
