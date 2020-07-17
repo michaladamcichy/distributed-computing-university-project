@@ -97,7 +97,8 @@ public:
 
                 requestsMutex.lock();
                 //COM::log("requestsMutex.lock()");
-                sort(requests.begin(), requests.end());
+                sort(requests.begin(), requests.end
+				Lamport::update(requests[0].timestamp);
                 //COM::log("sorted! :)");
             }
         }
