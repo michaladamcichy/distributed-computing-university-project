@@ -113,9 +113,9 @@ public:
 
     void release(int units)
     {
-        COM::log("RELEASED " + Messages::resourceToName(type));
         Release release(units, type);
         COM::sendToAll(&release, type + MESSAGE_RELEASE);
+		COM::log("RELEASED " + Messages::resourceToName(type));
         requestsHandler.remove(MpiConfig::rank);
     }
 };
