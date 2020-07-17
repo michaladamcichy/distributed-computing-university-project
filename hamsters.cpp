@@ -50,15 +50,20 @@ int main(int argc, char **argv)
             Resource trucizny(RESOURCE_TRUCIZNA, Constants::MAX_TRUCIZNY_COUNT);
 
             Zlecenie zlecenie = zleceniaMessages[zlecenia.acquire(1)];
+			COM::log(">>> ACQUIRED zlecenie");
             //COM::log(">>> zlecenie acquired (" + to_string(zlecenie.count) + " hamsters)");
 
             agrafki.acquire(1);
+			COM::log(">>> ACQUIRED agrafka");
 
             trucizny.acquire(zlecenie.count);
+			COM::log(">>> ACQUIRED trucizna");
 
             trucizny.release(zlecenie.count);
+			COM::log(">>> RELEASED trucizna");
 
             agrafki.release(1);
+			COM::log(">>> RELEASED agrafka");
 
             COM::log(">>> zlecenie completed");
             Completed message;

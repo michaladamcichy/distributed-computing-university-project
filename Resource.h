@@ -98,11 +98,10 @@ public:
                 requestsMutex.lock();
                 //COM::log("requestsMutex.lock()");
                 sort(requests.begin(), requests.end());
-				Lamport::update(requests[0].timestamp);
                 //COM::log("sorted! :)");
             }
         }
-        COM::log("ACQUIRED " + Messages::resourceToName(type));
+        //COM::log("ACQUIRED " + Messages::resourceToName(type));
 
         requestsMutex.unlock();
         //COM::log("requestsMutex.unlock()");
@@ -116,7 +115,7 @@ public:
     {
         Release release(units, type);
         COM::sendToAll(&release, type + MESSAGE_RELEASE);
-		COM::log("RELEASED " + Messages::resourceToName(type));
+		//COM::log("RELEASED " + Messages::resourceToName(type));
         requestsHandler.remove(MpiConfig::rank);
     }
 };
