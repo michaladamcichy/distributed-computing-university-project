@@ -101,6 +101,7 @@ public:
                 //COM::log("sorted! :)");
             }
         }
+	Lamport::getTimestamp(); //inkrementacja z. L.
         //COM::log("ACQUIRED " + Messages::resourceToName(type));
 
         requestsMutex.unlock();
