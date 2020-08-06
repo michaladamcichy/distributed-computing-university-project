@@ -103,7 +103,9 @@ private:
 
             int sender = (*((Message *)&buffer)).source;
             COM::logReceive(sender, &buffer, (MessageType)that->type); //taki mały trik, żeby wyciągnąć pierwsze pole z obiektu :)
-
+            
+            Lamport::update((*((Message *)&buffer)).timestamp);
+            
             that->messages->push_back(buffer);
             that->messagesMutex->unlock();
 
